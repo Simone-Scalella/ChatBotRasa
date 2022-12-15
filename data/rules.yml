@@ -11,3 +11,8 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Tell me the time
+  steps:
+  - intent: iniquire_time
+  - action: action_hello_world

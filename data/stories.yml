@@ -28,3 +28,9 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+- story: time path
+  steps:
+  - intent: iniquire_time
+  - action: action_hello_world
+  

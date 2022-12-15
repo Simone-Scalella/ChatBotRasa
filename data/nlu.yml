@@ -39,6 +39,11 @@ nlu:
     - that sounds good
     - correct
 
+- intent: iniquire_time
+  examples: |
+    - what time is it ?
+    - time, please ?
+
 - intent: deny
   examples: |
     - no

@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-dimensione_prodotto",
+      "2": "I-dimensione_prodotto",
+      "3": "L-dimensione_prodotto",
+      "4": "U-dimensione_prodotto",
+      "5": "B-tipo_prodotto",
+      "6": "I-tipo_prodotto",
+      "7": "L-tipo_prodotto",
+      "8": "U-tipo_prodotto",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-dimensione_prodotto": 1,
+      "I-dimensione_prodotto": 2,
+      "L-dimensione_prodotto": 3,
+      "U-dimensione_prodotto": 4,
+      "B-tipo_prodotto": 5,
+      "I-tipo_prodotto": 6,
+      "L-tipo_prodotto": 7,
+      "U-tipo_prodotto": 8,
+      "O": 0
+    },
+    "num_tags": 9
+  }
+]

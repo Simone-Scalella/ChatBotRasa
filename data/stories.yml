@@ -2,35 +2,125 @@ version: "3.1"
 
 stories:
 
-- story: happy path
+- story: percorso felice
   steps:
-  - intent: greet
+  - intent: salutare
   - action: utter_greet
-  - intent: mood_great
+  - intent: salutare_bene
   - action: utter_happy
 
-- story: sad path 1
+- story: percorso triste 1
   steps:
-  - intent: greet
+  - intent: salutare
   - action: utter_greet
-  - intent: mood_unhappy
+  - intent: non_felice
   - action: utter_cheer_up
   - action: utter_did_that_help
-  - intent: affirm
+  - intent: affermativo
   - action: utter_happy
 
-- story: sad path 2
+- story: percorso triste 2
   steps:
-  - intent: greet
+  - intent: salutare
   - action: utter_greet
-  - intent: mood_unhappy
+  - intent: non_felice
   - action: utter_cheer_up
   - action: utter_did_that_help
-  - intent: deny
+  - intent: negare
   - action: utter_goodbye
 
-- story: time path
+- story: percorso temporale
   steps:
-  - intent: iniquire_time
+  - intent: tempo
   - action: action_hello_world
+
+- story: storia interattiva 1
+  steps:
+  - intent: salutare
+  - action: utter_greet
+  - intent: acquisto_prodotto
+  - action: prodotto_form
+  - active_loop: prodotto_form
+  - slot_was_set:
+    - requested_slot: dimensione_prodotto
+  - slot_was_set:
+    - dimensione_prodotto: grande
+  - slot_was_set:
+    - dimensione_prodotto: grande
+  - slot_was_set:
+    - requested_slot: tipo_prodotto
+  - slot_was_set:
+    - tipo_prodotto: biscotti
+  - slot_was_set:
+    - tipo_prodotto: null
+  - slot_was_set:
+    - tipo_prodotto: merendine
+  - slot_was_set:
+    - tipo_prodotto: null
+  - slot_was_set:
+    - tipo_prodotto: taralli
+  - slot_was_set:
+    - tipo_prodotto: null
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_submit
+  - action: utter_prodotto_slots
+  - intent: arrivederci
+  - action: utter_goodbye
+
+- story: storia interattiva 2
+  steps:
+    - intent: salutare
+    - action: utter_greet
+    - intent: acquisto_prodotto
+    - action: prodotto_form
+    - active_loop: prodotto_form
+    - slot_was_set:
+      - requested_slot: dimensione_prodotto
+    - slot_was_set:
+      - dimensione_prodotto: grande
+    - slot_was_set:
+      - dimensione_prodotto: media
+    - slot_was_set:
+      - dimensione_prodotto: null
+    - slot_was_set:
+      - dimensione_prodotto: piccolo
+    - slot_was_set:
+      - requested_slot: tipo_prodotto
+    - slot_was_set:
+      - tipo_prodotto: biscotti
+    - slot_was_set:
+      - tipo_prodotto: null
+    - slot_was_set:
+      - tipo_prodotto: merendine
+    - slot_was_set:
+      - tipo_prodotto: null
+    - slot_was_set:
+      - tipo_prodotto: taralli
+    - slot_was_set:
+      - tipo_prodotto: null
+    - slot_was_set:
+      - requested_slot: null
+    - active_loop: null
+    - action: utter_submit
+    - action: utter_prodotto_slots
+    - intent: arrivederci
+    - action: utter_goodbye  
+
+- story: Utente interrompe la form e non continua
+  steps:
+  - intent: salutare
+  - action: utter_greet
+  - intent: acquisto_prodotto
+  - action: prodotto_form
+  - active_loop: prodotto_form
+  - intent: stop
+  - action: utter_ask_continue
+  - or:
+    - intent: stop
+    - intent: affermativo
+  - action: action_deactivate_loop
+  - active_loop: null
+
   

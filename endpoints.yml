@@ -41,10 +41,10 @@ action_endpoint:
 #  password: password
 #  queue: queue
 
-'''tracker_store:
-  type: SQL
-  dialect: "mysql+pymysql"
-  url: "localhost"
-  db: "provasimone"
-  username: "root"
-  password: ""'''
+  tracker_store:
+    type: SQL
+    dialect: "mysql+pymysql"
+    url: "localhost"
+    db: "provasimone"
+    username: "root"
+    password: ""

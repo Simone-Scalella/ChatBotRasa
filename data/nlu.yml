@@ -1,92 +1,90 @@
 version: "3.1"
 
 nlu:
-- intent: greet
+- intent: salutare
   examples: |
-    - hey
-    - hello
-    - hi
+    - ciao
+    - bella
+    - hei
     - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
+    - buongiorno
+    - buona serata
+    - ehi
+    - ciccio
+    - andiamo
+    - hey amico
+    - buon giorno
+    - buonasera
+    - buon proseguimento
 
-- intent: goodbye
+- intent: arrivederci
   examples: |
     - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - arrivedercii
+    - ci vediamo più tardi
+    - buona notte
+    - aarrivederci
+    - le auguro una buona giornata
+    - ci vediamo in giro
+    - ciao ciao
+    - cii vediamo piu tardi
 
-- intent: affirm
+- intent: affermativo
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - si
+    - ok
+    - infatti
+    - vero
+    - questo suona bene
+    - corretto
 
-- intent: iniquire_time
+- intent: tempo
   examples: |
-    - what time is it ?
-    - time, please ?
+    - che ora è ?
+    - tempo, per favore ?
 
-- intent: deny
+- intent: negare
   examples: |
     - no
     - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - mai
+    - Io non penso
+    - non mi paice
+    - non c'è modo
+    - non veramente
 
-- intent: mood_great
+- intent: salutare_bene
   examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
+    - perfetto
+    - grande
+    - incredibile
+    - sei un king
+    - stupendo
+    - Mi sento molto bene
+    - Sono grande
+    - Io sono incredibile
+    - Salverò il mondo
+    - super entusiasta
+    - estremamente bene
+    - così è perfetto
+    - così bene
 
-- intent: mood_unhappy
+- intent: non_felice
   examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
+    - la mia giornata è stata orribile
+    - Io sono triste
+    - Io non mi sento molto bene
+    - Io non sono d'accordo
+    - Super infelice 
+    - Io sono molto triste
+    - triste
+    - molto triste
+    - infelice
+    - non bene
+    - non molto bene
+    - estremamente triste
+    - moolto infelice
+    - molto triiste
 
 - intent: bot_challenge
   examples: |
@@ -94,3 +92,36 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+- intent: stop
+  examples: |
+    - adesso basta
+    - basta
+    - stop
+    - non voglio continuare
+
+- intent: acquisto_prodotto
+  examples: |
+    - Mi piacerebbe comprare uno dei vostri prodotti
+    - voglio una confezione
+    - vorrei una confezione
+    - voglio acquistare alcuni dei vostri prodotti
+    - sono interessato all'acquisto di una confezione
+    - sono interessata all'acquisto di una confezione
+    - desidero fare degli acquisti
+    - comprare un prodotto
+    - volerre prodotto
+    - comprare qualcosa
+    - volere qualcosa
+    - fare reagali
+    - volere spendere
+
+#- intent: inform
+#  examples: |
+#    - Mi piacerebbe una [grande](dimensione_prodotto) confezione
+#    - Io voglio ordinare una [piccolo](dimensione_prodotto) pacco di [biscotti](tipo_prodotto)
+#    - Io vorrei una confezione [media](dimensione_prodotto) di [merendine](tipo_prodotto)
+#    - voglio acquistare una [grande](dimensione_prodotto) confezione di [taralli](tipo_prodotto)
+#    - sono interessato all'acquisto di una confezione [grande](dimensione_prodotto) di [biscotti](tipo_prodotto)
+#    - sono interessata all'acquisto di una confezione [piccolo](dimensione_prodotto) [taralli](tipo_prodotto)
+

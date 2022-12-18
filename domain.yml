@@ -1,37 +1,92 @@
 version: "3.1"
 
 intents:
-  - greet
-  - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
+  - salutare
+  - arrivederci
+  - affermativo
+  - negare
+  - salutare_bene
+  - non_felice
   - bot_challenge
-  - iniquire_time
+  - tempo
+  - acquisto_prodotto
+  - inform
+  - stop
+
+entities:
+  - dimensione_prodotto
+  - tipo_prodotto
+
+slots:
+  dimensione_prodotto:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: dimensione_prodotto
+
+  tipo_prodotto:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: tipo_prodotto
+
+forms:
+  prodotto_form:
+    required_slots:
+      - dimensione_prodotto
+      - tipo_prodotto
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
+  - text: "Ciao! Come stai"
 
   utter_cheer_up:
-  - text: "Here is something to cheer you up:"
+  - text: "Ecco qualcosa per tirarti su di morale:"
     image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
-  - text: "Did that help you?"
+  - text: "Ti ha aiutato?"
 
   utter_happy:
-  - text: "Great, carry on!"
+  - text: "Ottimo, continua!"
 
   utter_goodbye:
-  - text: "Bye"
+  - text: "Ciao"
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
 
+  utter_prodotto_slots:
+  - text: "Io adesso ordinerò un {tipo_prodotto} da {dimensione_prodotto}"
+
+  utter_ask_continue:
+  - text: "Sei sicuro di voler uscire dalla form ?"
+
+  utter_ask_dimensione:
+  - text: "Di che dimensione deve essere la confezione richiesta ? "
+
+  utter_ask_tipo:
+  - text: "Che tipo di prodotto vuoi acquistare ? "
+
+  utter_submit:
+  - text: "Io adesso ordinerò il prodotto per te"
+
 actions:
 - action_hello_world
+- utter_greet
+- utter_cheer_up
+- utter_did_that_help
+- utter_happy
+- utter_goodbye
+- utter_iamabot
+- utter_prodotto_slots
+- utter_ask_continue
+- utter_ask_dimensione
+- utter_ask_tipo
+- validate_prodotto_form
+- utter_submit
 
 session_config:
   session_expiration_time: 60

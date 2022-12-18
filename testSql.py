@@ -31,4 +31,4 @@ records = cursor.fetchall()
 ## Showing the data
 for record in records:
     print('pippo')
-    print(type(record[0]))
+    print(record[0])

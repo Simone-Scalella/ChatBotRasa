@@ -4,7 +4,7 @@ rules:
 
 - rule: Say goodbye anytime the user says goodbye
   steps:
-  - intent: goodbye
+  - intent: arrivederci
   - action: utter_goodbye
 
 - rule: Say 'I am a bot' anytime the user challenges
@@ -14,5 +14,31 @@ rules:
 
 - rule: Tell me the time
   steps:
-  - intent: iniquire_time
+  - intent: tempo
   - action: action_hello_world
+
+- rule: Attivare prodotto form
+  steps:
+  - intent: acquisto_prodotto
+  - action: prodotto_form
+  - active_loop: prodotto_form
+
+- rule: Invio prodotto form
+  condition:
+  - active_loop: prodotto_form
+  steps:
+  - action: prodotto_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_submit
+  - action: utter_prodotto_slots
+
+- rule: Interruzione prodotto form
+  condition:
+  - active_loop: prodotto_form
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+  - action: prodotto_form
+  - active_loop: prodotto_form 

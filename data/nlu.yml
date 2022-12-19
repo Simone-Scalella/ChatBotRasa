@@ -124,6 +124,10 @@ nlu:
     - fare reagali
     - volere spendere
 
+- intent: vedi_foto
+  examples: |
+    - vorrei vedere
+
 #- intent: inform
 #  examples: |
 #    - Mi piacerebbe una [grande](dimensione_prodotto) confezione

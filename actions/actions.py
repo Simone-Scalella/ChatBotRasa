@@ -85,3 +85,31 @@ class ActionHelloWorld(Action):
         '''result = db.query('Select nome_citta FROM citta where cittaID = 0')
         dispatcher.utter_message(result)
         return []'''
+class GetImageFromDB(FormValidationAction):
+    def name(self) -> Text:
+        return "get_image_from_db"
+
+    def validate_prodName(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:Dict[Text, Any])-> List[Dict[Text, Any]]:
+        '''dispatcher.utter_message(text="Hello World!")
+        return []'''
+        mydb = sql.connect(
+        host="5.135.165.96",
+        user="chatbot",
+        password="kaffeehouse",
+        database = "chatbot"
+        )
+        cursor = mydb.cursor()
+        cursor.execute("Select image FROM mulino_bianco where name = {}".format(slot_value))
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("Questo prodotto non esiste!")
+        else:
+            dispatcher.utter_message(result[0][0])
+
+        return []
+

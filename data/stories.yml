@@ -123,4 +123,10 @@ stories:
   - action: action_deactivate_loop
   - active_loop: null
 
+- story: percorso foto
+  steps:
+  - intent: vedi_foto
+  - action: prodotto_form
+  - active_loop: image_form
+  - action: get_image_from_db
   

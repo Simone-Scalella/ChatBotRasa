@@ -41,10 +41,10 @@ action_endpoint:
 #  password: password
 #  queue: queue
 
-  tracker_store:
-    type: SQL
-    dialect: "mysql+pymysql"
-    url: "5.135.165.96"
-    db: "chatbot"
-    username: "chatbot"
-    password: "kaffeehouse"
+#  tracker_store:
+#    type: SQL
+#    dialect: "mysql+pymysql"
+#    url: "5.135.165.96"
+#    db: "chatbot"
+#    username: "chatbot"
+#    password: "kaffeehouse"

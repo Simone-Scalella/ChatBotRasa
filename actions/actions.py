@@ -66,13 +66,13 @@ class ActionHelloWorld(Action):
         '''dispatcher.utter_message(text="Hello World!")
         return []'''
         mydb = sql.connect(
-        host="5.135.165.96",
-        user="chatbot",
-        password="kaffeehouse",
-        database = "chatbot"
+        host="localhost",
+        user="root",
+        password="",
+        database = "provasimone"
         )
         cursor = mydb.cursor()
-        cursor.execute("Select name FROM mulino_bianco where id = 1")
+        cursor.execute("Select nome_citta FROM citta where cittaID = 1")
         result = cursor.fetchall()
         if len(result) == 0:
             dispatcher.utter_message("Sorry we couldn't find Email in our database")
@@ -82,9 +82,16 @@ class ActionHelloWorld(Action):
 
         return []
 
-        '''result = db.query('Select nome_citta FROM citta where cittaID = 0')
-        dispatcher.utter_message(result)
-        return []'''
+class NonHoCapito(Action):
+    def name(self) -> Text:
+        return "non_ho_capito"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="Scusa puoi ripetere ? non ho capito quello che mi hai detto.")
+        return []
+
 class GetImageFromDB(FormValidationAction):
     def name(self) -> Text:
         return "get_image_from_db"
@@ -112,4 +119,3 @@ class GetImageFromDB(FormValidationAction):
             dispatcher.utter_message(result[0][0])
 
         return []
-

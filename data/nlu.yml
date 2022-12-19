@@ -110,13 +110,13 @@ nlu:
 
 - intent: acquisto_prodotto
   examples: |
-    - Mi piacerebbe comprare uno dei vostri prodotti
+    - comprare prodotti
     - voglio una confezione
     - vorrei una confezione
-    - voglio acquistare alcuni dei vostri prodotti
-    - sono interessato all'acquisto di una confezione
-    - sono interessata all'acquisto di una confezione
-    - desidero fare degli acquisti
+    - acquistare prodotti
+    - acquisto confezione
+    - acquisto regali
+    - desidero acquisti
     - comprare un prodotto
     - volerre prodotto
     - comprare qualcosa

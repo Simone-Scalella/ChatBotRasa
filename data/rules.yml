@@ -20,6 +20,7 @@ rules:
 - rule: Attivare prodotto form
   steps:
   - intent: acquisto_prodotto
+  - action: utter_ok
   - action: prodotto_form
   - active_loop: prodotto_form
 

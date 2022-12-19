@@ -89,6 +89,9 @@ responses:
   utter_ask_nome:
   - text: "Di che prodotto vuoi vedere l'immagine? "
 
+  utter_ok:
+  - text: "Perfetto, procediamo con l'acquisto"
+
 actions:
 - action_hello_world
 - utter_greet
@@ -104,6 +107,8 @@ actions:
 - validate_prodotto_form
 - utter_submit
 - utter_ask_nome
+- non_ho_capito
+- utter_ok
 
 session_config:
   session_expiration_time: 60

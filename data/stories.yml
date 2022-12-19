@@ -39,6 +39,7 @@ stories:
   - intent: salutare
   - action: utter_greet
   - intent: acquisto_prodotto
+  - action: utter_ok
   - action: prodotto_form
   - active_loop: prodotto_form
   - slot_was_set:
@@ -74,6 +75,7 @@ stories:
     - intent: salutare
     - action: utter_greet
     - intent: acquisto_prodotto
+    - action: utter_ok
     - action: prodotto_form
     - active_loop: prodotto_form
     - slot_was_set:
@@ -113,6 +115,7 @@ stories:
   - intent: salutare
   - action: utter_greet
   - intent: acquisto_prodotto
+  - action: utter_ok
   - action: prodotto_form
   - active_loop: prodotto_form
   - intent: stop

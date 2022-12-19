@@ -73,6 +73,9 @@ responses:
   utter_submit:
   - text: "Io adesso ordinerò il prodotto per te"
 
+  utter_ok:
+  - text: "Perfetto, procediamo con l'acquisto"
+
 actions:
 - action_hello_world
 - utter_greet
@@ -87,6 +90,8 @@ actions:
 - utter_ask_tipo
 - validate_prodotto_form
 - utter_submit
+- non_ho_capito
+- utter_ok
 
 session_config:
   session_expiration_time: 60

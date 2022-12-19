@@ -44,7 +44,7 @@ action_endpoint:
   tracker_store:
     type: SQL
     dialect: "mysql+pymysql"
-    url: "localhost"
-    db: "provasimone"
-    username: "root"
-    password: ""
+    url: "5.135.165.96"
+    db: "chatbot"
+    username: "chatbot"
+    password: "kaffeehouse"

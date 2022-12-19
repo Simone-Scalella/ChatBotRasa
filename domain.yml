@@ -22,15 +22,19 @@ slots:
     type: text
     influence_conversation: true
     mappings:
-      - type: from_entity
-        entity: dimensione_prodotto
+      - type: from_text
+        conditions:
+          - active_loop: prodotto_form
+            requested_slot: dimensione_prodotto
 
   tipo_prodotto:
     type: text
     influence_conversation: true
     mappings:
-      - type: from_entity
-        entity: tipo_prodotto
+      - type: from_text
+        conditions:
+          - active_loop: prodotto_form
+            requested_slot: tipo_prodotto
 
 forms:
   prodotto_form:
@@ -64,10 +68,10 @@ responses:
   utter_ask_continue:
   - text: "Sei sicuro di voler uscire dalla form ?"
 
-  utter_ask_dimensione:
+  utter_ask_dimensione_prodotto:
   - text: "Di che dimensione deve essere la confezione richiesta ? "
 
-  utter_ask_tipo:
+  utter_ask_tipo_prodotto:
   - text: "Che tipo di prodotto vuoi acquistare ? "
 
   utter_submit:
@@ -86,8 +90,8 @@ actions:
 - utter_iamabot
 - utter_prodotto_slots
 - utter_ask_continue
-- utter_ask_dimensione
-- utter_ask_tipo
+- utter_ask_dimensione_prodotto
+- utter_ask_tipo_prodotto
 - validate_prodotto_form
 - utter_submit
 - non_ho_capito

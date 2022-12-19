@@ -13,14 +13,14 @@ from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.types import DomainDict
 
-Dimensioni = ['piccolo','media','grande']
-Tipo = ['biscotti','merendine','taralli']
+Dimensioni = ["piccolo","media","grande"]
+Tipo = ["biscotti","merendine","taralli"]
 
 class ValidateProdottoForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_prodotto_form"
 
-    def validate_dimensione(
+    def validate_dimensione_prodotto(
         self,
         slot_value: Any,
         dispatcher: CollectingDispatcher,
@@ -28,13 +28,17 @@ class ValidateProdottoForm(FormValidationAction):
         domain:DomainDict
     ) -> Dict[Text, Any]:
 
+        print("validate dimensione prodotto")
+        print(slot_value)
         if slot_value.lower() not in Dimensioni:
-            dispatcher.utter_message(text='Il valore della dimensione inserita non va bene')
-            return {'dimensione_prodotto': None}
-        dispatcher.utter_message(text=f'Ok, tu hai scelto la dimensione {slot_value}')
-        return {'dimensione_prodotto': {slot_value}}
+            print("validazione fallita")
+            dispatcher.utter_message(text="Il valore della dimensione inserita non va bene")
+            return {"dimensione_prodotto": None}
+        print("validazione successa")
+        dispatcher.utter_message(text=f"Ok, tu hai scelto la dimensione {slot_value}")
+        return {"dimensione_prodotto": slot_value}
 
-    def validate_tipo(
+    def validate_tipo_prodotto(
         self,
         slot_value: Any,
         dispatcher: CollectingDispatcher,
@@ -46,7 +50,7 @@ class ValidateProdottoForm(FormValidationAction):
             dispatcher.utter_message(text="Noi abbiamo: '{'/'.join(Tipo)}.")
             return {'tipo_prodotto': None}
         dispatcher.utter_message(text=f'Ok, tu hai scelto il prodotto del tipo {slot_value}')
-        return {'tipo_prodotto': {slot_value}}
+        return {'tipo_prodotto': slot_value}
     
 
 

@@ -3,3 +3,4 @@ venv
 /models/*
 /.rasa/*
 .rasa/cache/cache.db
+/actions/__pycache__/*

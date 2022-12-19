@@ -88,10 +88,16 @@ nlu:
 
 - intent: bot_challenge
   examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
+    - sei un bot?
+    - sei un umano?
+    - sei un maschio?
+    - sei una femmina?
+    - sei un uomo?
+    - sei una donna?
+    - quanti anni hai?
+    - sto parlando con un bot?
+    - sto parlando con una persona?
+    - sto parlando con un essere umano?
 
 - intent: stop
   examples: |
@@ -99,6 +105,8 @@ nlu:
     - basta
     - stop
     - non voglio continuare
+    - non voglio acquistare altro
+    - ho finito
 
 - intent: acquisto_prodotto
   examples: |

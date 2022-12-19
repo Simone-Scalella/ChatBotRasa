@@ -12,10 +12,12 @@ intents:
   - acquisto_prodotto
   - inform
   - stop
+  - vedi_foto
 
 entities:
   - dimensione_prodotto
   - tipo_prodotto
+  - prodotto
 
 slots:
   dimensione_prodotto:
@@ -36,11 +38,22 @@ slots:
           - active_loop: prodotto_form
             requested_slot: tipo_prodotto
 
+  prodotto:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: form_product
+        entity: prodotto
+
 forms:
   prodotto_form:
     required_slots:
       - dimensione_prodotto
       - tipo_prodotto
+
+  image_form:
+    required_slots:
+      - prodotto
 
 responses:
   utter_greet:
@@ -77,6 +90,9 @@ responses:
   utter_submit:
   - text: "Io adesso ordinerò il prodotto per te"
 
+  utter_ask_nome:
+  - text: "Di che prodotto vuoi vedere l'immagine? "
+
   utter_ok:
   - text: "Perfetto, procediamo con l'acquisto"
 
@@ -94,6 +110,7 @@ actions:
 - utter_ask_tipo_prodotto
 - validate_prodotto_form
 - utter_submit
+- utter_ask_nome
 - non_ho_capito
 - utter_ok
 

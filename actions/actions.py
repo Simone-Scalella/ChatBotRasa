@@ -66,13 +66,13 @@ class ActionHelloWorld(Action):
         '''dispatcher.utter_message(text="Hello World!")
         return []'''
         mydb = sql.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database = "provasimone"
+        host="5.135.165.96",
+        user="chatbot",
+        password="kaffeehouse",
+        database = "chatbot"
         )
         cursor = mydb.cursor()
-        cursor.execute("Select nome_citta FROM citta where cittaID = 0")
+        cursor.execute("Select name FROM mulino_bianco where id = 1")
         result = cursor.fetchall()
         if len(result) == 0:
             dispatcher.utter_message("Sorry we couldn't find Email in our database")

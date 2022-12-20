@@ -116,6 +116,7 @@ actions:
 - non_ho_capito
 - utter_ok
 - get_image_from_db
+- submit_acquisto
 
 session_config:
   session_expiration_time: 60

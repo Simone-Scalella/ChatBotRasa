@@ -49,6 +49,7 @@ stories:
   - active_loop: null
   - action: utter_submit
   - action: utter_prodotto_slots
+  - action: submit_acquisto
   - intent: arrivederci
   - action: utter_goodbye
 

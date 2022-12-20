@@ -23,6 +23,10 @@ rules:
   - action: utter_ok
   - action: prodotto_form
   - active_loop: prodotto_form
+  - active_loop: null
+  - action: utter_submit
+  - action: utter_prodotto_slots
+  - action: submit_acquisto
 
 - rule: Invio prodotto form
   condition:
@@ -34,6 +38,7 @@ rules:
     - requested_slot: null
   - action: utter_submit
   - action: utter_prodotto_slots
+  - action: submit_acquisto
 
 - rule: Interruzione prodotto form
   condition:

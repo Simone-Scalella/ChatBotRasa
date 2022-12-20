@@ -55,10 +55,19 @@ class ValidateProdottoForm(FormValidationAction):
 
 
 
-'''class TellTime(Action):
-    
+class SubmitAcquisto(FormValidationAction):
     def name(self) -> Text:
-        return "Hai utilizzato la funzione tell time"'''
+        return "submit_acquisto"
+
+    def run(self,
+            #slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="Acquisto avvenuto con successo !!")
+        #'tipo_prodotto': None
+        
+        return [{"name":"dimensione_prodotto","event":"slot","value":None},{"name":"tipo_prodotto","event":"slot","value":None}]
 
 class ActionHelloWorld(Action):
     def name(self) -> Text:

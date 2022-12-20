@@ -42,8 +42,10 @@ slots:
     type: text
     influence_conversation: true
     mappings:
-      - type: form_product
-        entity: prodotto
+      - type: from_text
+        conditions:
+          - active_loop: image_form
+            requested_slot: prodotto
 
 forms:
   prodotto_form:
@@ -113,6 +115,7 @@ actions:
 - utter_ask_nome
 - non_ho_capito
 - utter_ok
+- get_image_from_db
 
 session_config:
   session_expiration_time: 60

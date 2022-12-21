@@ -209,7 +209,8 @@ class GetProdottiBrand(Action):
         tracker: Tracker,
         domain: DomainDict):
         
-        nome_brand=tracker.get_slot('brand').lower()
+        appo=tracker.get_slot('brand').split('"')
+        nome_brand=appo[3]
         query = 'SELECT name FROM mulino_bianco WHERE brands=%s'
 
         cursor.execute(query,(nome_brand,))
@@ -221,5 +222,5 @@ class GetProdottiBrand(Action):
             for elem in result:
                 pb=pb+f' - {elem[0]}\n'
             dispatcher.utter_message(text=pb)
-
+        #dispatcher.utter_message(text=nome_brand)
         return [{"name":"brand","event":"slot","value":None}]

@@ -38,11 +38,6 @@ nlu:
     - questo suona bene
     - corretto
 
-- intent: tempo
-  examples: |
-    - che ora è ?
-    - tempo, per favore ?
-
 - intent: categoria
   examples: |
     - categorie disponibili

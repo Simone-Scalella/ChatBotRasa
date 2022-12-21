@@ -8,7 +8,6 @@ intents:
   - salutare_bene
   - non_felice
   - bot_challenge
-  - tempo
   - categoria
   - acquisto_prodotto
   - inform
@@ -100,7 +99,6 @@ responses:
   - text: "Perfetto, procediamo con l'acquisto"
 
 actions:
-- action_hello_world
 - action_categoria
 - utter_greet
 - utter_cheer_up

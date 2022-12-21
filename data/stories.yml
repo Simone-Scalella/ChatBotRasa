@@ -29,11 +29,6 @@ stories:
   - intent: negare
   - action: utter_goodbye
 
-- story: percorso temporale
-  steps:
-  - intent: tempo
-  - action: action_hello_world
-
 - story: percorso categoria
   steps:
   - intent: categoria

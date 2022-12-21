@@ -14,11 +14,14 @@ intents:
   - stop
   - vedi_foto
   - vedi_categorie
+  - brand
+  - viewBrandProduct
 
 entities:
   - dimensione_prodotto
   - tipo_prodotto
   - prodotto
+  - brand
 
 slots:
   dimensione_prodotto:
@@ -47,6 +50,12 @@ slots:
         conditions:
           - active_loop: image_form
             requested_slot: prodotto
+  
+  brand:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
 
 forms:
   prodotto_form:
@@ -119,6 +128,8 @@ actions:
 - utter_ok
 - get_image_from_db
 - submit_acquisto
+- get_brand
+- get_prodotti_brand
 
 session_config:
   session_expiration_time: 60

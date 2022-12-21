@@ -42,6 +42,8 @@ nlu:
   examples: |
     - categorie disponibili
     - categorie, per favore
+    - mostrami le categorie
+    - mostami le tipologie
 
 - intent: negare
   examples: |
@@ -140,6 +142,11 @@ nlu:
     - voglio vedere un immagine
     - fammi vedere un immagine
     - mostrami un immagine
+
+- intent: brand
+  examples: |
+    - quali sono i brand?
+    - mostra i brand
 
 #- intent: inform
 #  examples: |

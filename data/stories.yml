@@ -80,3 +80,9 @@ stories:
   - active_loop: null
   - action: get_image_from_db
   
+- story: percorso brand
+  steps:
+  - intent: brand
+  - action: get_brand
+  - intent: viewBrandProduct
+  - action: get_prodotti_brand

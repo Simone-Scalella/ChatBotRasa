@@ -111,7 +111,7 @@ class GetImageFromDB(Action):
 
         return [{"name":"prodotto","event":"slot","value":None}]
 
-#Azione che permette di visualizzare l'immagine di un dato prodotto
+#Azione che permette di visualizzare le varie categorie dei prodotti presenti nel db
 class GetCategorie(Action):
     def name(self) -> Text:
         return "action_categoria"
@@ -136,6 +136,35 @@ class GetCategorie(Action):
 
         return []
 
+#Azione che permette di visualizzare l'immagine di un dato prodotto
+class GetBrand(Action):
+    def name(self) -> Text:
+        return "get_brand"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict):
+        
+        
+        query = 'SELECT DISTINCT brands FROM mulino_bianco'
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("Non ci sono brand!")
+        else:
+            brd='I brand presenti sono: \n'
+            buttons=[]
+            for elem in result:
+                brd=brd+f' - {elem[0]}\n'
+                buttons.append({"title": elem[0], "payload": f'/viewBrandProduct{{"brand":"{elem[0]}"}}'})
+            dispatcher.utter_button_message(brd,buttons)
+            #dispatcher.utter_message(text=brd)
+
+        return []
+
 class ActionHelloWorld(Action):
     def name(self) -> Text:
         return "action_hello_world"
@@ -145,3 +174,29 @@ class ActionHelloWorld(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         dispatcher.utter_message(text="Hello World!")
         return []
+
+#Azione che permette di visualizzare i prodotti di un brand
+class GetProdottiBrand(Action):
+    def name(self) -> Text:
+        return "get_prodotti_brand"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict):
+        
+        nome_brand=tracker.get_slot('brand').lower()
+        query = 'SELECT name FROM mulino_bianco WHERE brands=%s'
+
+        cursor.execute(query,(nome_brand,))
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("Questo brand non ha prodotti!")
+        else:
+            pb=f"Ecco i prodtti di {nome_brand}: \n"
+            for elem in result:
+                pb=pb+f' - {elem[0]}\n'
+            dispatcher.utter_message(text=pb)
+
+        return [{"name":"brand","event":"slot","value":None}]

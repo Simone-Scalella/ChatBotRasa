@@ -49,9 +49,6 @@ slots:
     influence_conversation: true
     mappings:
       - type: from_text
-        conditions:
-          - active_loop: packaging_form
-            requested_slot: prodotto 
 
   prodotto:
     type: text

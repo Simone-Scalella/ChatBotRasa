@@ -135,3 +135,13 @@ class GetCategorie(Action):
             dispatcher.utter_message(text=cat)
 
         return []
+
+class ActionHelloWorld(Action):
+    def name(self) -> Text:
+        return "action_hello_world"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="Hello World!")
+        return []

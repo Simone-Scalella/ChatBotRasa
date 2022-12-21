@@ -13,6 +13,14 @@ from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.types import DomainDict
 
+mydb = sql.connect(
+        host="5.135.165.96",
+        user="chatbot",
+        password="kaffeehouse",
+        database = "chatbot"
+        )
+cursor = mydb.cursor()
+
 Dimensioni = ["piccolo","media","grande"]
 Tipo = ["biscotti","merendine","taralli"]
 
@@ -115,16 +123,9 @@ class GetImageFromDB(Action):
         tracker: Tracker,
         domain: DomainDict):
         
-        nome_prodotto=tracker.get_slot('prodotto')
+        nome_prodotto=tracker.get_slot('prodotto').lower()
         query = 'SELECT image FROM mulino_bianco WHERE name=%s'
 
-        mydb = sql.connect(
-        host="5.135.165.96",
-        user="chatbot",
-        password="kaffeehouse",
-        database = "chatbot"
-        )
-        cursor = mydb.cursor()
         cursor.execute(query,(nome_prodotto,))
         result = cursor.fetchall()
         if len(result) == 0:

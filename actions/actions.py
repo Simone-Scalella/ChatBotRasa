@@ -13,6 +13,7 @@ from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.types import DomainDict
 
+# Connessione al database 
 mydb = sql.connect(
         host="5.135.165.96",
         user="chatbot",
@@ -24,6 +25,7 @@ cursor = mydb.cursor()
 Dimensioni = ["piccolo","media","grande"]
 Tipo = ["biscotti","merendine","taralli"]
 
+# Azione di validazione della form per l'acquisto di un prodotto
 class ValidateProdottoForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_prodotto_form"
@@ -60,9 +62,7 @@ class ValidateProdottoForm(FormValidationAction):
         dispatcher.utter_message(text=f'Ok, tu hai scelto il prodotto del tipo {slot_value}')
         return {'tipo_prodotto': slot_value}
     
-
-
-
+# Azione che effettua la submit di un acquisto
 class SubmitAcquisto(FormValidationAction):
     def name(self) -> Text:
         return "submit_acquisto"
@@ -77,42 +77,7 @@ class SubmitAcquisto(FormValidationAction):
         
         return [{"name":"dimensione_prodotto","event":"slot","value":None},{"name":"tipo_prodotto","event":"slot","value":None}]
 
-class ActionHelloWorld(Action):
-    def name(self) -> Text:
-        return "action_hello_world"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        '''dispatcher.utter_message(text="Hello World!")
-        return []'''
-        mydb = sql.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database = "provasimone"
-        )
-        cursor = mydb.cursor()
-        cursor.execute("Select nome_citta FROM citta where cittaID = 1")
-        result = cursor.fetchall()
-        if len(result) == 0:
-            dispatcher.utter_message("Sorry we couldn't find Email in our database")
-        else:
-            dispatcher.utter_message("il risultato e': "+result[0][0])
-        # dispatcher.utter_message(text="Hello World!")
-
-        return []
-
-class ActionCategoria(Action):
-    def name(self) -> Text:
-        return "action_categoria"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(text="Scusa puoi ripetere ? non ho capito quello che mi hai detto.")
-        return []
-
+# Azione che richiede di ripetere se il charbot non ha capito
 class NonHoCapito(Action):
     def name(self) -> Text:
         return "non_ho_capito"
@@ -123,6 +88,7 @@ class NonHoCapito(Action):
         dispatcher.utter_message(text="Scusa puoi ripetere ? non ho capito quello che mi hai detto.")
         return []
 
+#Azione che permette di visualizzare l'immagine di un dato prodotto
 class GetImageFromDB(Action):
     def name(self) -> Text:
         return "get_image_from_db"
@@ -144,3 +110,4 @@ class GetImageFromDB(Action):
             dispatcher.utter_message(text=f"Ecco a te un immagine di {nome_prodotto}:",image=result[0][0])
 
         return [{"name":"prodotto","event":"slot","value":None}]
+

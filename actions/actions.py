@@ -218,7 +218,7 @@ class GetProdottiBrand(Action):
         if len(result) == 0:
             dispatcher.utter_message("Questo brand non ha prodotti!")
         else:
-            pb=f"Ecco i prodtti di {nome_brand}: \n"
+            pb=f"Ecco i prodotti di {nome_brand}: \n"
             for elem in result:
                 pb=pb+f' - {elem[0]}\n'
             dispatcher.utter_message(text=pb)

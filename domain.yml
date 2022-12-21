@@ -13,6 +13,7 @@ intents:
   - inform
   - stop
   - vedi_foto
+  - vedi_categorie
 
 entities:
   - dimensione_prodotto
@@ -75,7 +76,7 @@ responses:
   - text: "Ciao"
 
   utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+  - text: "Sono un bot, che conosce i prodotti della Mulino Bianco. Realizzato da KaffeeHause"
 
   utter_prodotto_slots:
   - text: "Io adesso ordinerò un {tipo_prodotto} da {dimensione_prodotto}"

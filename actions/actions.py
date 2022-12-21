@@ -111,3 +111,27 @@ class GetImageFromDB(Action):
 
         return [{"name":"prodotto","event":"slot","value":None}]
 
+#Azione che permette di visualizzare l'immagine di un dato prodotto
+class GetCategorie(Action):
+    def name(self) -> Text:
+        return "action_categoria"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict):
+        
+        query = 'SELECT DISTINCT category FROM mulino_bianco'
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("Non ci sono categorie di prodotto!")
+        else:
+            cat='Le categorie di prodotti sono le seguenti: \n'
+            for elem in result:
+                cat=cat+f' - {elem[0]}\n'
+            dispatcher.utter_message(text=cat)
+
+        return []

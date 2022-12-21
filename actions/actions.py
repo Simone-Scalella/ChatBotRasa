@@ -111,7 +111,30 @@ class GetImageFromDB(Action):
 
         return [{"name":"prodotto","event":"slot","value":None}]
 
-#Azione che permette di visualizzare le varie categorie dei prodotti presenti nel db
+#Azione che permette di visualizzare il packaging di un dato prodotto
+class GetPackagingFromDB(Action):
+    def name(self) -> Text:
+        return "action_packaging"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict):
+        
+        nome_prodotto=tracker.get_slot('prodotto').lower()
+        query = 'SELECT packaging FROM mulino_bianco WHERE name=%s'
+
+        cursor.execute(query,(nome_prodotto,))
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("Questo prodotto non esiste!")
+        else:
+            dispatcher.utter_message(text=f"Ecco a te il packaging di {nome_prodotto}: {result[0][0]}")
+
+        return [{"name":"prodotto","event":"slot","value":None}]
+
+#Azione che permette di visualizzare l'immagine di un dato prodotto
 class GetCategorie(Action):
     def name(self) -> Text:
         return "action_categoria"

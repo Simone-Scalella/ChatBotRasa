@@ -79,6 +79,17 @@ stories:
     - requested_slot: prodotto
   - active_loop: null
   - action: get_image_from_db
+
+- story: percorso packaging
+  steps:
+  - intent: vedi_packaging
+  - action: utter_ask_packaging
+  - action: packaging_form
+  - active_loop: packaging_form
+  - slot_was_set:
+    - requested_slot: prodotto
+  - active_loop: null
+  - action: action_packaging
   
 - story: percorso brand
   steps:

@@ -22,6 +22,17 @@ rules:
   - intent: categoria
   - action: action_categoria
 
+- rule: Tell me packaging
+  steps:
+  - intent: vedi_packaging
+  - action: utter_ask_packaging
+  - action: packaging_form
+  - active_loop: packaging_form
+  - slot_was_set:
+    - requested_slot: prodotto
+  - active_loop: null
+  - action: action_packaging
+
 - rule: Attivare prodotto form
   steps:
   - intent: acquisto_prodotto

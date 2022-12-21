@@ -143,11 +143,17 @@ nlu:
     - fammi vedere un immagine
     - mostrami un immagine
 
+- intent: vedi_packaging
+  examples: |
+    - packaging prodotto
+    - mostra il packaging
+    - vorrei vedere il packaging di un prodotto
+
 - intent: brand
   examples: |
     - quali sono i brand?
     - mostra i brand
-
+    
 #- intent: inform
 #  examples: |
 #    - Mi piacerebbe una [grande](dimensione_prodotto) confezione

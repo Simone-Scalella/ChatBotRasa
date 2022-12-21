@@ -8,7 +8,9 @@ intents:
   - salutare_bene
   - non_felice
   - bot_challenge
+  - tempo
   - categoria
+  - vedi_packaging
   - acquisto_prodotto
   - inform
   - stop
@@ -41,6 +43,14 @@ slots:
         conditions:
           - active_loop: prodotto_form
             requested_slot: tipo_prodotto
+  
+  brand:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+          - active_loop: packaging_form
+            requested_slot: prodotto 
 
   prodotto:
     type: text
@@ -50,12 +60,8 @@ slots:
         conditions:
           - active_loop: image_form
             requested_slot: prodotto
-  
-  brand:
-    type: text
-    influence_conversation: true
-    mappings:
-      - type: from_text
+          - active_loop: packaging_form
+            requested_slot: prodotto 
 
 forms:
   prodotto_form:
@@ -64,6 +70,10 @@ forms:
       - tipo_prodotto
 
   image_form:
+    required_slots:
+      - prodotto
+  
+  packaging_form:
     required_slots:
       - prodotto
 
@@ -105,6 +115,9 @@ responses:
   utter_ask_nome:
   - text: "Di che prodotto vuoi vedere l'immagine? "
 
+  utter_ask_packaging:
+  - text: "Di che prodotto vuoi vedere il packaging? "
+
   utter_ok:
   - text: "Perfetto, procediamo con l'acquisto"
 
@@ -117,6 +130,7 @@ actions:
 - utter_happy
 - utter_goodbye
 - utter_iamabot
+- utter_ask_packaging
 - utter_prodotto_slots
 - utter_ask_continue
 - utter_ask_dimensione_prodotto
@@ -130,6 +144,7 @@ actions:
 - submit_acquisto
 - get_brand
 - get_prodotti_brand
+- action_packaging
 
 session_config:
   session_expiration_time: 60

@@ -72,7 +72,11 @@ stories:
 - story: percorso foto
   steps:
   - intent: vedi_foto
-  - action: prodotto_form
+  - action: utter_ask_nome
+  - action: image_form
   - active_loop: image_form
+  - slot_was_set:
+    - requested_slot: prodotto
+  - active_loop: null
   - action: get_image_from_db
   

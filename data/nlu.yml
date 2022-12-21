@@ -127,6 +127,19 @@ nlu:
 - intent: vedi_foto
   examples: |
     - vorrei vedere
+    - voglio vedere
+    - fammi vedere
+    - mostrami
+    - mostrami la foto
+    - mostrami l'immagine
+    - vorrei vedere una foto
+    - voglio vedere una foto
+    - fammi vedere una foto
+    - mostrami una foto
+    - vorrei vedere un immagine
+    - voglio vedere un immagine
+    - fammi vedere un immagine
+    - mostrami un immagine
 
 #- intent: inform
 #  examples: |

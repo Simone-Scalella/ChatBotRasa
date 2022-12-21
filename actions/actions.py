@@ -105,18 +105,19 @@ class NonHoCapito(Action):
         dispatcher.utter_message(text="Scusa puoi ripetere ? non ho capito quello che mi hai detto.")
         return []
 
-class GetImageFromDB(FormValidationAction):
+class GetImageFromDB(Action):
     def name(self) -> Text:
         return "get_image_from_db"
 
-    def validate_prodName(
+    def run(
         self,
-        slot_value: Any,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
-        domain:Dict[Text, Any])-> List[Dict[Text, Any]]:
-        '''dispatcher.utter_message(text="Hello World!")
-        return []'''
+        domain: DomainDict):
+        
+        nome_prodotto=tracker.get_slot('prodotto')
+        query = 'SELECT image FROM mulino_bianco WHERE name=%s'
+
         mydb = sql.connect(
         host="5.135.165.96",
         user="chatbot",
@@ -124,11 +125,11 @@ class GetImageFromDB(FormValidationAction):
         database = "chatbot"
         )
         cursor = mydb.cursor()
-        cursor.execute("Select image FROM mulino_bianco where name = {}".format(slot_value))
+        cursor.execute(query,(nome_prodotto,))
         result = cursor.fetchall()
         if len(result) == 0:
             dispatcher.utter_message("Questo prodotto non esiste!")
         else:
-            dispatcher.utter_message(result[0][0])
+            dispatcher.utter_message(image=result[0][0])
 
         return []

@@ -17,6 +17,11 @@ rules:
   - intent: tempo
   - action: action_hello_world
 
+- rule: Tell me category
+  steps:
+  - intent: categoria
+  - action: action_categoria
+
 - rule: Attivare prodotto form
   steps:
   - intent: acquisto_prodotto

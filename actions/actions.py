@@ -103,6 +103,16 @@ class ActionHelloWorld(Action):
 
         return []
 
+class ActionCategoria(Action):
+    def name(self) -> Text:
+        return "action_categoria"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="Scusa puoi ripetere ? non ho capito quello che mi hai detto.")
+        return []
+
 class NonHoCapito(Action):
     def name(self) -> Text:
         return "non_ho_capito"

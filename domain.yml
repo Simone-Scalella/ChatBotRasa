@@ -9,6 +9,7 @@ intents:
   - non_felice
   - bot_challenge
   - tempo
+  - categoria
   - acquisto_prodotto
   - inform
   - stop
@@ -100,6 +101,7 @@ responses:
 
 actions:
 - action_hello_world
+- action_categoria
 - utter_greet
 - utter_cheer_up
 - utter_did_that_help

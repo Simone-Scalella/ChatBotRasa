@@ -34,6 +34,11 @@ stories:
   - intent: tempo
   - action: action_hello_world
 
+- story: percorso categoria
+  steps:
+  - intent: categoria
+  - action: action_categoria
+
 - story: storia interattiva 1
   steps:
   - intent: salutare

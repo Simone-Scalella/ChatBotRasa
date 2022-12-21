@@ -43,6 +43,11 @@ nlu:
     - che ora è ?
     - tempo, per favore ?
 
+- intent: categoria
+  examples: |
+    - categorie disponibili
+    - categorie, per favore
+
 - intent: negare
   examples: |
     - no

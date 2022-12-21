@@ -130,6 +130,6 @@ class GetImageFromDB(Action):
         if len(result) == 0:
             dispatcher.utter_message("Questo prodotto non esiste!")
         else:
-            dispatcher.utter_message(image=result[0][0])
+            dispatcher.utter_message(text=f"Ecco a te un immagine di {nome_prodotto}",image=result[0][0])
 
-        return []
+        return [{"name":"prodotto","event":"slot","value":None}]

@@ -153,7 +153,15 @@ nlu:
   examples: |
     - quali sono i brand?
     - mostra i brand
-    
+
+- intent: snack_meno_calorie
+  examples: |
+      - quali sono le merendine con meno di [100](calorie) kcal?
+      - quali sono gli snack con meno di [254](calorie) kcal?
+      - fammi vedere le merendine con meno di [310](calorie) kcal
+      - fammi vedere gli snack con meno di [155](calorie) kcal
+      - mostrami le merendine con meno di [450](calorie) kcal
+      - mostrami gli snack con meno di [267](calorie) kcal
 #- intent: inform
 #  examples: |
 #    - Mi piacerebbe una [grande](dimensione_prodotto) confezione

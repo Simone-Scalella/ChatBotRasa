@@ -224,3 +224,29 @@ class GetProdottiBrand(Action):
             dispatcher.utter_message(text=pb)
         #dispatcher.utter_message(text=nome_brand)
         return [{"name":"brand","event":"slot","value":None}]
+
+#Azione che permette di visualizzare le merendine con meno di X calorie per porzione
+class GetSnackCalLessFromDB(Action):
+    def name(self) -> Text:
+        return "get_snack_meno_cal"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict):
+        
+        cal_serSize=tracker.latest_message['entities'][0]['value']
+        query = f'SELECT name, servin_size, energy_kcal_value FROM mulino_bianco WHERE energy_kcal_value<({cal_serSize}*100)/servin_size'
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("Non ci sono prodotti che rispettano questa condizione!")
+        else:
+            pl=f"I prodotti con medo di {cal_serSize} a porzione sono: \n"
+            for elem in result:
+                pl=pl+f' - {elem[0]}, porzione: {elem[1]}, kcal per porzione: {(elem[1]*elem[2])/100}\n'
+            dispatcher.utter_message(text=pl)
+        #dispatcher.utter_message(text=nome_brand)
+        return [{"name":"calorie","event":"slot","value":None}]

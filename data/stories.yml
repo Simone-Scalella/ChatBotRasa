@@ -97,3 +97,8 @@ stories:
   - action: get_brand
   - intent: viewBrandProduct
   - action: get_prodotti_brand
+
+- story: percorso calorie  minori di
+  steps:
+  - intent: snack_meno_calorie
+  - action: get_snack_meno_cal

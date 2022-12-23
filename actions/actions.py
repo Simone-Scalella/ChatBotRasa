@@ -34,6 +34,7 @@ class ValidateProdottoForm(FormValidationAction):
 
     def validate_tipo_prodotto(
         self,
+        slot_value: Any,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict):
@@ -42,10 +43,10 @@ class ValidateProdottoForm(FormValidationAction):
         query = 'SELECT DISTINCT name FROM mulino_bianco'
 
         cursor.execute(query)
-        result = cursor.fetchall()
+        result = list(cursor.fetchall())
 
         print(result)
-
+        print(nome_prodotto)
         if nome_prodotto not in result:
             dispatcher.utter_message(text="Non hai inserito un prodotto presente nel database")
             return {'tipo_prodotto': None}
@@ -54,6 +55,7 @@ class ValidateProdottoForm(FormValidationAction):
 
     def validate_dimensione_prodotto(
         self,
+        slot_value: Any,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: DomainDict):
@@ -62,7 +64,7 @@ class ValidateProdottoForm(FormValidationAction):
         query = 'SELECT quantity FROM mulino_bianco WHERE name = {tipo_prodotto}'
 
         cursor.execute(query,("tipo_prodotto",))
-        result = cursor.fetchall()
+        result = list(cursor.fetchall())
         if dimensione not in result:
             print("validazione fallita")
             dispatcher.utter_message(text="Il valore della dimensione inserita non va bene")

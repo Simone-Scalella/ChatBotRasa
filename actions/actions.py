@@ -45,10 +45,10 @@ class ValidateProdottoForm(FormValidationAction):
         cursor.execute(query)
         result = [row for [row] in cursor.fetchall()]
 
-        print(result)
+        #print(result)
         print(nome_prodotto)
         if nome_prodotto not in result:
-            dispatcher.utter_message(text="Non hai inserito un prodotto presente nel database")
+            dispatcher.utter_message(text="prodotto inesistente")
             return {'tipo_prodotto': None}
         dispatcher.utter_message(text=f'Ok, hai scelto il prodotto {nome_prodotto}')
         return {'tipo_prodotto': nome_prodotto}
@@ -60,14 +60,18 @@ class ValidateProdottoForm(FormValidationAction):
         tracker: Tracker,
         domain: DomainDict):
 
-        dimensione=tracker.get_slot('dimensione_prodotto').lower()
-        query = 'SELECT quantity FROM mulino_bianco WHERE name = {tipo_prodotto}'
-
-        cursor.execute(query,("tipo_prodotto",))
+        dimensione=tracker.get_slot('dimensione_prodotto')
+        tipo_prodotto = tracker.get_slot('tipo_prodotto').lower()
+        query = f'SELECT quantity FROM mulino_bianco WHERE name = \'{tipo_prodotto}\''
+        cursor.execute(query)
         result = [row for [row] in cursor.fetchall()]
         if dimensione not in result:
             print("validazione fallita")
             dispatcher.utter_message(text="Il valore della dimensione inserita non va bene")
+            validStr = ''
+            for content in result:
+                validStr += content+','
+            dispatcher.utter_message(text="I valori ammissibili sono: "+validStr[:-1])
             return {"dimensione_prodotto": None}
         print("validazione successa")
         dispatcher.utter_message(text=f"Ok, hai scelto la dimensione {dimensione}")
@@ -83,12 +87,19 @@ class SubmitAcquisto(FormValidationAction):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(text="Acquisto avvenuto con successo !!")
-        query = 'INSER INTO acquisti (prodotto, dimensione) VALUES ({tipo_prodotto},{dimensione_prodotto})'
-
-        cursor.execute(query)
+        
+        tipo_prod = tracker.get_slot('tipo_prodotto')
+        dim_prod = tracker.get_slot('dimensione_prodotto')
+        query = "INSERT INTO acquisti (prodotto, dimensione) VALUES (%s,%s);"
+        try:
+            cursor.execute(query,(tipo_prod,dim_prod))
+            mydb.commit()
+            dispatcher.utter_message(text="Acquisto avvenuto con successo !!")
+        except:
+            dispatcher.utter_message(text="Errore database")
         #'tipo_prodotto': None
         
+
         return [{"name":"dimensione_prodotto","event":"slot","value":None},{"name":"tipo_prodotto","event":"slot","value":None}]
 
 # Azione che richiede di ripetere se il chatbot non ha capito

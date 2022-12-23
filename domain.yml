@@ -39,7 +39,7 @@ slots:
     mappings:
       - type: from_text
         conditions:
-          - active_loop: dimensione_prodotto_form
+          - active_loop: prodotto_form
             requested_slot: dimensione_prodotto
 
   tipo_prodotto:
@@ -115,9 +115,6 @@ forms:
   prodotto_form:
     required_slots:
       - tipo_prodotto
-
-  dimensione_prodotto_form:
-    required_slots:
       - dimensione_prodotto
   
   image_form:

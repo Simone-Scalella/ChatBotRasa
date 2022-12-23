@@ -41,9 +41,6 @@ rules:
   - active_loop: prodotto_form
   - slot_was_set:
     - requested_slot: tipo_prodotto
-  - active_loop: null
-  - action: dimensione_prodotto_form
-  - active_loop: dimensione_prodotto_form
   - slot_was_set:
     - requested_slot: dimensione_prodotto
   - active_loop: null

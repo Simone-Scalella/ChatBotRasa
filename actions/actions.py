@@ -246,7 +246,8 @@ class GetSnackCalLessFromDB(Action):
         else:
             pl=f"I prodotti con medo di {cal_serSize} a porzione sono: \n"
             for elem in result:
-                pl=pl+f' - {elem[0]}, porzione: {elem[1]}, kcal per porzione: {(elem[1]*elem[2])/100}\n'
+                if not elem[0] in pl:
+                    pl=pl+f' - {elem[0]}, porzione: {elem[1]}, kcal per porzione: {(elem[1]*elem[2])/100}\n'
             dispatcher.utter_message(text=pl)
         #dispatcher.utter_message(text=nome_brand)
         return [{"name":"calorie","event":"slot","value":None}]

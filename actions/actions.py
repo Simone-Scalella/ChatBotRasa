@@ -25,42 +25,51 @@ cursor = mydb.cursor()
 Dimensioni = ["piccolo","media","grande"]
 Tipo = ["biscotti","merendine","taralli"]
 
+nome_prod = ""
+
 # Azione di validazione della form per l'acquisto di un prodotto
 class ValidateProdottoForm(FormValidationAction):
     def name(self) -> Text:
         return "validate_prodotto_form"
 
-    def validate_dimensione_prodotto(
+    def validate_tipo_prodotto(
         self,
-        slot_value: Any,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
-        domain:DomainDict
-    ) -> Dict[Text, Any]:
+        domain: DomainDict):
 
-        print("validate dimensione prodotto")
-        print(slot_value)
-        if slot_value.lower() not in Dimensioni:
+        nome_prodotto=tracker.get_slot('tipo_prodotto').lower()
+        query = 'SELECT DISTINCT name FROM mulino_bianco'
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        print(result)
+
+        if nome_prodotto not in result:
+            dispatcher.utter_message(text="Non hai inserito un prodotto presente nel database")
+            return {'tipo_prodotto': None}
+        dispatcher.utter_message(text=f'Ok, hai scelto il prodotto {nome_prodotto}')
+        return {'tipo_prodotto': nome_prodotto}
+
+    def validate_dimensione_prodotto(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict):
+
+        dimensione=tracker.get_slot('dimensione_prodotto').lower()
+        query = 'SELECT quantity FROM mulino_bianco WHERE name = {tipo_prodotto}'
+
+        cursor.execute(query,("tipo_prodotto",))
+        result = cursor.fetchall()
+        if dimensione not in result:
             print("validazione fallita")
             dispatcher.utter_message(text="Il valore della dimensione inserita non va bene")
             return {"dimensione_prodotto": None}
         print("validazione successa")
-        dispatcher.utter_message(text=f"Ok, tu hai scelto la dimensione {slot_value}")
-        return {"dimensione_prodotto": slot_value}
-
-    def validate_tipo_prodotto(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain:DomainDict
-    ) -> Dict[Text, Any]:
-
-        if slot_value.lower() not in Tipo:
-            dispatcher.utter_message(text="Noi abbiamo: '{'/'.join(Tipo)}.")
-            return {'tipo_prodotto': None}
-        dispatcher.utter_message(text=f'Ok, tu hai scelto il prodotto del tipo {slot_value}')
-        return {'tipo_prodotto': slot_value}
+        dispatcher.utter_message(text=f"Ok, hai scelto la dimensione {dimensione}")
+        return {"dimensione_prodotto": dimensione}
     
 # Azione che effettua la submit di un acquisto
 class SubmitAcquisto(FormValidationAction):
@@ -73,6 +82,9 @@ class SubmitAcquisto(FormValidationAction):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         dispatcher.utter_message(text="Acquisto avvenuto con successo !!")
+        query = 'INSER INTO acquisti (prodotto, dimensione) VALUES ({tipo_prodotto},{dimensione_prodotto})'
+
+        cursor.execute(query)
         #'tipo_prodotto': None
         
         return [{"name":"dimensione_prodotto","event":"slot","value":None},{"name":"tipo_prodotto","event":"slot","value":None}]

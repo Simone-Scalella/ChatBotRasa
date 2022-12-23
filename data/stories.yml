@@ -34,7 +34,7 @@ stories:
   - intent: categoria
   - action: action_categoria
 
-- story: storia interattiva 1
+- story: percorso acquisto
   steps:
   - intent: salutare
   - action: utter_greet
@@ -43,9 +43,9 @@ stories:
   - action: prodotto_form
   - active_loop: prodotto_form
   - slot_was_set:
-    - requested_slot: dimensione_prodotto
-  - slot_was_set:
     - requested_slot: tipo_prodotto
+  - slot_was_set:
+    - requested_slot: dimensione_prodotto
   - active_loop: null
   - action: utter_submit
   - action: utter_prodotto_slots

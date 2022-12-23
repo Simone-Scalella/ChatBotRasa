@@ -61,7 +61,7 @@ slots:
           - active_loop: image_form
             requested_slot: prodotto
           - active_loop: packaging_form
-            requested_slot: prodotto 
+            requested_slot: prodotto
   
   calorie:
     type: float
@@ -75,8 +75,8 @@ slots:
 forms:
   prodotto_form:
     required_slots:
-      - dimensione_prodotto
       - tipo_prodotto
+      - dimensione_prodotto
 
   image_form:
     required_slots:

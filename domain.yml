@@ -34,12 +34,12 @@ entities:
 
 slots:
   dimensione_prodotto:
-    type: text
+    type: float
     influence_conversation: true
     mappings:
       - type: from_text
         conditions:
-          - active_loop: prodotto_form
+          - active_loop: dimensione_prodotto_form
             requested_slot: dimensione_prodotto
 
   tipo_prodotto:
@@ -66,7 +66,7 @@ slots:
           - active_loop: image_form
             requested_slot: prodotto
           - active_loop: packaging_form
-            requested_slot: prodotto 
+            requested_slot: prodotto
   
   calorie:
     type: float
@@ -114,9 +114,12 @@ slots:
 forms:
   prodotto_form:
     required_slots:
-      - dimensione_prodotto
       - tipo_prodotto
 
+  dimensione_prodotto_form:
+    required_slots:
+      - dimensione_prodotto
+  
   image_form:
     required_slots:
       - prodotto

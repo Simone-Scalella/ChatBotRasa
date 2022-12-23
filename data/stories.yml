@@ -102,3 +102,19 @@ stories:
   steps:
   - intent: snack_meno_calorie
   - action: get_snack_meno_cal
+
+- story: informazione prodotti
+  steps:
+  - intent: prodotti_con_info
+  - action: prodotto_info_form
+  - active_loop: prodotto_info_form
+  - slot_was_set:
+    - requested_slot: info_ingredienti
+  - slot_was_set:
+    - requested_slot: info_serving
+  - slot_was_set:
+    - requested_slot: info_categoria
+  - slot_was_set:
+    - requested_slot: info_quantity
+  - active_loop: null
+  - action: query_result

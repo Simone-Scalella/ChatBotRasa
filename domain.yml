@@ -19,6 +19,7 @@ intents:
   - brand
   - viewBrandProduct
   - snack_meno_calorie
+  - prodotti_con_info
 
 entities:
   - dimensione_prodotto
@@ -26,6 +27,10 @@ entities:
   - prodotto
   - brand
   - calorie
+  - info_ingredienti
+  - info_serving
+  - info_categoria
+  - info_quantity
 
 slots:
   dimensione_prodotto:
@@ -72,6 +77,40 @@ slots:
           - active_loop: calorie_form
             requested_slot: calorie
 
+  #infomazione prodotto
+  info_ingredienti:
+    type: list
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: prodotto_info_form
+          requested_slot: info_ingredienti
+  info_serving:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: prodotto_info_form
+          requested_slot: info_serving
+  info_categoria:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: prodotto_info_form
+          requested_slot: info_categoria
+  info_quantity:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: prodotto_info_form
+          requested_slot: info_quantity
+
 forms:
   prodotto_form:
     required_slots:
@@ -89,6 +128,11 @@ forms:
   calorie_form:
     required_slots:
       - calorie
+  
+  prodotto_info_form:
+    required_slots: [info_ingredienti,info_serving,info_categoria,info_quantity]
+    
+
 
 responses:
   utter_greet:
@@ -134,6 +178,18 @@ responses:
   utter_ok:
   - text: "Perfetto, procediamo con l'acquisto"
 
+  utter_ask_info_ingredienti:
+  - text: "Che tipo di ingrenti sei interessato ? puo' rispondere skip o no se non interessa il filtro su questo campo"
+
+  utter_ask_info_serving:
+  - text: "Ha un serving size minimo? puo' rispondere skip o no se non interessa il filtro su questo campo"
+
+  utter_ask_info_categoria:
+  - text: "Che tipo di categoria sei interessato ? puo' rispondere skip o no se non interessa il filtro su questo campo"
+
+  utter_ask_info_quantity:
+  - text: "Che tipo di quantita minima richiesta ? puo' rispondere skip o no se non interessa il filtro su questo campo"
+
 actions:
 - action_hello_world
 - action_categoria
@@ -159,6 +215,9 @@ actions:
 - get_prodotti_brand
 - action_packaging
 - get_snack_meno_cal
+- submit_info_prodotti
+- validate_prodotto_info_form
+- query_result
 
 session_config:
   session_expiration_time: 60

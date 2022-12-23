@@ -162,6 +162,14 @@ nlu:
       - fammi vedere gli snack con meno di [155](calorie) kcal
       - mostrami le merendine con meno di [450](calorie) kcal
       - mostrami gli snack con meno di [267](calorie) kcal
+
+- intent: prodotti_con_info
+  examples: |
+    - lista prodotti
+    - fammi vedere i vostri prodotti
+    - elenco dei prodotti
+    - vorrei vedere elenco dei prodotti
+  
 #- intent: inform
 #  examples: |
 #    - Mi piacerebbe una [grande](dimensione_prodotto) confezione

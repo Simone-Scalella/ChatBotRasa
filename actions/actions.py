@@ -43,7 +43,7 @@ class ValidateProdottoForm(FormValidationAction):
         query = 'SELECT DISTINCT name FROM mulino_bianco'
 
         cursor.execute(query)
-        result = list(cursor.fetchall())
+        result = [row for [row] in cursor.fetchall()]
 
         print(result)
         print(nome_prodotto)
@@ -64,7 +64,7 @@ class ValidateProdottoForm(FormValidationAction):
         query = 'SELECT quantity FROM mulino_bianco WHERE name = {tipo_prodotto}'
 
         cursor.execute(query,("tipo_prodotto",))
-        result = list(cursor.fetchall())
+        result = [row for [row] in cursor.fetchall()]
         if dimensione not in result:
             print("validazione fallita")
             dispatcher.utter_message(text="Il valore della dimensione inserita non va bene")

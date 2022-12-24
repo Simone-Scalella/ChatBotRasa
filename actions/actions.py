@@ -277,6 +277,148 @@ class GetSnackCalLessFromDB(Action):
         #dispatcher.utter_message(text=nome_brand)
         return [{"name":"calorie_slot","event":"slot","value":None}]
 
+
+# risultato delle informazioni prodotti
+class RisultatoDellaRicerca(Action):
+    def name(self) -> Text:
+        return "query_result"
+
+    def run(self,
+            #slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        emptyQuery = True
+
+        BasicQueryString = 'SELECT name,quantity,servin_size,category,ingredients FROM mulino_bianco WHERE '
+        info_ingredienti=tracker.get_slot('info_ingredienti')
+        if(len(info_ingredienti)>0 and info_ingredienti[0] != 'no'):
+            emptyQuery = False
+            regexStr = '\''
+            for ingredienti in info_ingredienti:
+                regexStr += ingredienti.lower()+'|'
+        BasicQueryString += 'ingredients REGEXP ' + regexStr[:-1]+'\''
+
+        info_serving=tracker.get_slot('info_serving')
+        if(info_serving.lower() != 'no'):
+            emptyQuery = False
+            BasicQueryString += ' AND servin_size >=' + info_serving
+        
+        info_categoria=tracker.get_slot('info_categoria').lower()
+        if(info_categoria != 'no'):
+            emptyQuery = False
+            BasicQueryString += ' AND category REGEXP \''+info_categoria+'\''
+        
+        info_quantity=tracker.get_slot('info_quantity')
+        if(info_quantity.lower() != 'no'):
+            emptyQuery = False
+            BasicQueryString += ' AND quantity >= '+ info_quantity
+
+        if(not emptyQuery):
+            print(BasicQueryString)
+            cursor.execute(BasicQueryString)
+            result = cursor.fetchall()
+            if len(result) == 0:
+                dispatcher.utter_message("Non ci sono prodotti che rispettano questa condizione!")
+            else:
+                pl=f"I prodotti con la condizione proposta sono: \n"
+                dispatcher.utter_message(text=pl)
+                for elem in result:
+                    pout=f' - {elem[0]}, quantita: {elem[1]}, servin size: {elem[2]}, categoria: {elem[3]}, ingredienti:{elem[4]}\n'
+                    dispatcher.utter_message(text=pout)
+
+
+        print("risultato query")
+        return [{"name":"info_ingredienti","event":"slot","value":None},{"name":"info_serving","event":"slot","value":None},{"name":"info_categoria","event":"slot","value":None},{"name":"info_quantity","event":"slot","value":None}]
+
+#Validazione informazione prodotti
+class ValidateProdottoInfoForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_prodotto_info_form"
+
+    def validate_info_ingredienti(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:DomainDict
+    ) -> Dict[Text, Any]:
+
+        print("validate info ingredienti")
+        if(slot_value[0] == 'no' or slot_value[0] == 'skip'):
+            print('skip slot')
+            return {"info_ingredienti": ['no']}
+        
+        arrayfied = slot_value[0].replace(' ',',')
+        arrayfied = arrayfied.split(',')
+        arrayfied = list(filter(lambda x: len(x)>0,arrayfied))
+        return {"info_ingredienti": arrayfied}
+
+    def validate_info_serving(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:DomainDict
+    ) -> Dict[Text, Any]:
+
+        print("validate info serving")
+        print(slot_value)
+        if(slot_value == 'no' or slot_value == 'skip'):
+            print('skip slot')
+            return {"info_serving": 'no'}
+        
+        if (slot_value.isdigit()):
+            return {'info_serving': slot_value}
+        else:
+            dispatcher.utter_message("Valore serving size non valido.")
+            return {'info_serving': None}
+    
+    def validate_info_categoria(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:DomainDict
+    ) -> Dict[Text, Any]:
+
+        print("validate info categoria")
+        print(slot_value)
+        if(slot_value == 'no' or slot_value == 'skip'):
+            print('skip slot')
+            return {"info_categoria": 'no'}
+        
+        query = f'SELECT name,category FROM mulino_bianco WHERE category LIKE \'%{slot_value}%\''
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("la categoria non e' valida.")
+            return {'info_categoria': None}
+
+        return {'info_categoria': slot_value}
+    
+    def validate_info_quantity(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:DomainDict
+    ) -> Dict[Text, Any]:
+
+        print("validate info quantity")
+        print(slot_value)
+        if(slot_value == 'no' or slot_value == 'skip'):
+            print('skip slot')
+            return {"info_quantity": 'no'}
+        
+        if (slot_value.isdigit()):
+            return {'info_serving': slot_value}
+        else:
+            dispatcher.utter_message("Valore quantity non e' valido.")
+            return {'info_serving': None}
+
 # Azione di validazione della form per l'acquisizione degli allergeni dell'utente
 class ValidateAllergeniForm(FormValidationAction):
 

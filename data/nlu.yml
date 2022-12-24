@@ -211,4 +211,9 @@ nlu:
       - Non oltre le [450](calorie) kcal
       - [267](calorie) kcal vanno bene
 
-
+- intent: prodotti_con_info
+  examples: |
+    - lista prodotti
+    - fammi vedere i vostri prodotti
+    - elenco dei prodotti
+    - vorrei vedere elenco dei prodotti

@@ -24,6 +24,7 @@ intents:
   - prodotto
   - info_problem
   - calorie
+  - prodotti_con_info
 
 entities:
   - dimensione_prodotto
@@ -156,6 +157,7 @@ forms:
   prodotto_form:
     required_slots:
       - tipo_prodotto
+      - dimensione_prodotto
 
   allergeni_form:
     required_slots:
@@ -280,6 +282,8 @@ actions:
 - utter_ingrediente
 - utter_calorie
 - utter_prodotto
+- validate_prodotto_info_form
+- query_result
 
 session_config:
   session_expiration_time: 60

@@ -39,19 +39,11 @@ rules:
   - action: utter_ok
   - action: prodotto_form
   - active_loop: prodotto_form
-  - active_loop: null
-  - action: utter_submit
-  - action: utter_prodotto_slots
-  - action: submit_acquisto
-
-- rule: Invio prodotto form
-  condition:
-  - active_loop: prodotto_form
-  steps:
-  - action: prodotto_form
-  - active_loop: null
   - slot_was_set:
-    - requested_slot: null
+    - requested_slot: tipo_prodotto
+  - slot_was_set:
+    - requested_slot: dimensione_prodotto
+  - active_loop: null
   - action: utter_submit
   - action: utter_prodotto_slots
   - action: submit_acquisto

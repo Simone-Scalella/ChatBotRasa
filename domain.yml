@@ -36,7 +36,7 @@ entities:
 
 slots:
   dimensione_prodotto:
-    type: text
+    type: float
     influence_conversation: true
     mappings:
       - type: from_text
@@ -107,7 +107,7 @@ slots:
           - active_loop: image_form
             requested_slot: prodotto
           - active_loop: packaging_form
-            requested_slot: prodotto 
+            requested_slot: prodotto
   
   calorie:
     type: float
@@ -118,10 +118,43 @@ slots:
           - active_loop: calorie_form
             requested_slot: calorie
 
+  #infomazione prodotto
+  info_ingredienti:
+    type: list
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: prodotto_info_form
+          requested_slot: info_ingredienti
+  info_serving:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: prodotto_info_form
+          requested_slot: info_serving
+  info_categoria:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: prodotto_info_form
+          requested_slot: info_categoria
+  info_quantity:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: prodotto_info_form
+          requested_slot: info_quantity
+
 forms:
   prodotto_form:
     required_slots:
-      - dimensione_prodotto
       - tipo_prodotto
 
   allergeni_form:
@@ -142,6 +175,11 @@ forms:
   calorie_form:
     required_slots:
       - calorie
+  
+  prodotto_info_form:
+    required_slots: [info_ingredienti,info_serving,info_categoria,info_quantity]
+    
+
 
 responses:
   utter_greet:
@@ -198,6 +236,18 @@ responses:
 
   utter_ok:
   - text: "Perfetto, procediamo con l'acquisto"
+
+  utter_ask_info_ingredienti:
+  - text: "Che tipo di ingrenti sei interessato? puo' rispondere skip o no se non interessa il filtro su questo campo"
+
+  utter_ask_info_serving:
+  - text: "Ha un preferenza di serving size minimo? puo' rispondere skip o no se non interessa il filtro su questo campo"
+
+  utter_ask_info_categoria:
+  - text: "Che tipo di categoria sei interessato? puo' rispondere skip o no se non interessa il filtro su questo campo"
+
+  utter_ask_info_quantity:
+  - text: "Ha preferenza della quantita minima richiesta? puo' rispondere skip o no se non interessa il filtro su questo campo"
 
 actions:
 - action_hello_world

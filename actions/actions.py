@@ -439,6 +439,7 @@ class ValidateAllergeniForm(FormValidationAction):
         print(slot_value)
         if(slot_value == 'no' or slot_value == 'skip'):
             print('skip slot')
+            dispatcher.utter_message("A che tipo di ingrenti sei interessato? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
             return {"allergeni_slot": 'no'}
         
         query = f'SELECT name,allergens FROM mulino_bianco WHERE allergens LIKE \'%{slot_value}%\''
@@ -446,9 +447,11 @@ class ValidateAllergeniForm(FormValidationAction):
         cursor.execute(query)
         result = cursor.fetchall()
         if len(result) == 0:
-            dispatcher.utter_message("L'allergene non è presente nei nostri prodotti")
+            dispatcher.utter_message("L'allergene non è presente nei nostri prodotti"+"\n")
+            dispatcher.utter_message("A che tipo di ingrenti sei interessato ? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
             return {'allergeni_slot': 'no'}
-
+            
+        dispatcher.utter_message("A che tipo di ingrenti sei interessato ? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
         return {'allergeni_slot': slot_value}
 
     def validate_ingrediente_slot(
@@ -462,11 +465,13 @@ class ValidateAllergeniForm(FormValidationAction):
         print("validate info ingredienti")
         if(slot_value[0] == 'no' or slot_value[0] == 'skip'):
             print('skip slot')
+            dispatcher.utter_message("Quante calorie deve contenere al masimo ? Puoi rispondere skip o no se non interessa il filtro su questo campo")
             return {"ingrediente_slot": ['no']}
         
         arrayfied = slot_value[0].replace(' ',',')
         arrayfied = arrayfied.split(',')
         arrayfied = list(filter(lambda x: len(x)>0,arrayfied))
+        dispatcher.utter_message("Quante calorie deve contenere al masimo ? Puoi rispondere skip o no se non interessa il filtro su questo campo")
         return {"ingrediente_slot": arrayfied}
 
     def validate_calorie_slot(
@@ -481,12 +486,14 @@ class ValidateAllergeniForm(FormValidationAction):
         print(slot_value)
         if(slot_value == 'no' or slot_value == 'skip'):
             print('skip slot')
+            dispatcher.utter_message("A che prodotto sei interessato ? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
             return {"calorie_slot": 'no'}
         
         if (slot_value.isdigit()):
+            dispatcher.utter_message("A che prodotto sei interessato ? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
             return {'calorie_slot': slot_value}
         else:
-            dispatcher.utter_message("Valore serving size non valido.")
+            dispatcher.utter_message("Il valore delle calorie non e' valido.")
             return {'calorie_slot': None}
 
     def validate_prodotto_slot(
@@ -546,7 +553,7 @@ class SubmitAllergeni(FormValidationAction):
         info_allergeni=tracker.get_slot('allergeni_slot').lower()
         if(info_allergeni != 'no'):
             emptyQuery = False
-            BasicQueryString += ' AND allergens REGEXP \''+info_allergeni+'\''
+            BasicQueryString += ' AND allergens NOT REGEXP \''+info_allergeni+'\''
         
         info_prodotto=tracker.get_slot('prodotto_slot')
         if(info_prodotto.lower() != 'no'):

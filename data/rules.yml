@@ -64,3 +64,4 @@ rules:
   - action: utter_iamabot
   - action: prodotto_form
   - active_loop: prodotto_form 
+  

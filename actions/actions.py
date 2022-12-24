@@ -249,4 +249,158 @@ class GetSnackCalLessFromDB(Action):
                 pl=pl+f' - {elem[0]}, porzione: {elem[1]}, kcal per porzione: {(elem[1]*elem[2])/100}\n'
             dispatcher.utter_message(text=pl)
         #dispatcher.utter_message(text=nome_brand)
-        return [{"name":"calorie","event":"slot","value":None}]
+        return [{"name":"calorie_slot","event":"slot","value":None}]
+
+# Azione di validazione della form per l'acquisizione degli allergeni dell'utente
+class ValidateAllergeniForm(FormValidationAction):
+
+# Prendo tutti i prodotti presenti nel db e proseguo eliminando i risultati non essenziali
+    cursor.execute('select name, ingredients, energy_kcal_value, allergens from mulino_bianco')
+    Allproduct = cursor.fetchall()
+    Filter_result = []
+
+    def name(self) -> Text:
+        return "validate_allergeni_form"
+
+    def validate_allergeni_slot(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:DomainDict
+    ) -> Dict[Text, Any]:
+
+        nome_allergene=tracker.get_slot('allergeni_slot').lower()
+        allergeni_result = list(filter(lambda x: True if nome_allergene in x[3] else False, self.Allproduct)) 
+
+        # Se l'allergene non è presente, allora tutti i prodotti sono buoni
+        print(tracker.get_slot('allergeni_slot'))
+        print(self.Filter_result)
+
+        if len(allergeni_result) == len(self.Allproduct):
+            dispatcher.utter_message(text="Tutti i nostri prodotti sono privi del tuo allergene")
+            return {"allergeni_slot": None}
+        dispatcher.utter_message(text=f"Ok, ho selezionato tutti i prodotti senza {slot_value}")
+        self.Filter_result = allergeni_result # Aggiorno il valore 
+        return {"allergeni_slot": slot_value}
+
+    def validate_ingrediente_slot(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:DomainDict
+    ) -> Dict[Text, Any]:
+
+        nome_ingrediente=tracker.get_slot('ingrediente_slot').lower()
+        ingrediente_result = list(filter(lambda x: True if nome_ingrediente in x[1] else False, self.Filter_result))
+
+        # Se l'ingrediente richiesto non è presente, allora viene allertato l'utente
+        print(tracker.get_slot('ingrediente_slot'))
+        print(self.Filter_result)
+
+        if len(ingrediente_result) == 0:
+            dispatcher.utter_message(text="Non abbiamo prodotti privi del tuo allergene con l'ingrediente richiesto")
+            return {"ingrediente_slot": None}
+        dispatcher.utter_message(text=f"Ok, ho selezionato tutti i prodotti che contengono {slot_value}")
+        self.Filter_result = ingrediente_result # Aggiorno il valore 
+        return {"ingrediente_slot": slot_value}
+
+    def validate_calorie_slot(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:DomainDict
+    ) -> Dict[Text, Any]:
+
+        calorie=float(tracker.get_slot('calorie_slot').lower())
+        calorie_result = list(filter(lambda x: True if x[2] <= calorie else False, self.Filter_result))
+
+        # Se il numero di calorie non genera risultati, allora viene allertato l'utente
+        print(tracker.get_slot('calorie_slot'))
+        print(self.Filter_result)
+
+        if len(calorie_result) == 0:
+            dispatcher.utter_message(text="Le scelte precedenti non sono compatibili con questo numero di kcal, ci dispiace")
+            return {"calorie_slot": None}
+        dispatcher.utter_message(text=f"Ok, ho selezionato tutti i prodotti che contengono al massimo {slot_value}")
+        self.Filter_result = calorie_result # Aggiorno il valore 
+        return {"calorie_slot": slot_value}
+
+    def validate_prodotto_slot(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain:DomainDict
+    ) -> Dict[Text, Any]:
+
+        prodotto=tracker.get_slot('prodotto_slot').lower()
+        prodotto_result = list(filter(lambda x: True if prodotto in x[0] else False, self.Filter_result))
+
+        # Se la categoria di prodotto specificata non genera risultati, allora viene allertato l'utente
+        print(tracker.get_slot('prodotto_slot'))
+        for a in self.Filter_result:
+            print('\n')
+            print(a[0])
+        
+        if len(prodotto_result) == 0:
+            dispatcher.utter_message(text="Non abbiamo prodotti che soddisfano i tuoi requisiti, ci dispiace")
+            return {"prodotto_slot": None}
+        dispatcher.utter_message(text=f"Ok, abbiamo prodotti per la categoria {slot_value}")
+        self.Filter_result = [] # Aggiorno il valore 
+        return {"prodotto_slot": slot_value}
+
+
+
+    
+# Azione che effettua la submit di un acquisto
+class SubmitAllergeni(FormValidationAction):
+    def name(self) -> Text:
+        return "submit_allergeni"
+
+    def run(self,
+            #slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="Adesso riproduciamo i risultati ottenuti: \n")
+        print('Sono dentro')
+        if(tracker.get_slot('ingrediente_slot') is None ):
+            print('Sono dentro 1')
+            query = "select name, ingredients, energy_kcal_value, allergens from mulino_bianco where allergeni not like "+"'%"+tracker.get_slot('allergeni_slot')+"%'"
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            for a in result:
+                dispatcher.utter_message(text= "Nome prodotto "+result[a][0]+"\n"+"Ingredienti: "+"\n"+result[1]+"\n"+"kcal "+result[2]+"\n"+"allergeni: "+"\n"+result[3]+"\n")
+            return [{"name":"allergene_slot","event":"slot","value":None}]
+
+        if(tracker.get_slot('calorie_slot') is None ):
+            print('Sono dentro 2')
+            query = "select name, ingredients, energy_kcal_value, allergens from mulino_bianco where allergeni not like "+"'%"+tracker.get_slot('allergeni_slot')+" and ingredients like "+"'%"+tracker.get_slot('ingrediente_slot')+"%'"
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            for a in result:
+                dispatcher.utter_message(text= "Nome prodotto "+result[a][0]+"\n"+"Ingredienti: "+"\n"+result[1]+"\n"+"kcal "+result[2]+"\n"+"allergeni: "+"\n"+result[3]+"\n")
+            return [{"name":"allergene_slot","event":"slot","value":None},{"name":"ingrediente_slot","event":"slot","value":None}]
+
+        if(tracker.get_slot('prodotto_slot') is None ):
+            print('Sono dentro 3')
+            value = tracker.get_slot('calorie_slot')
+            query = "select name, ingredients, energy_kcal_value, allergens from mulino_bianco where allergeni not like "+"'%"+tracker.get_slot('allergeni_slot')+" and ingredients like "+"'%"+tracker.get_slot('allergeni_slot')+"%'"+f' and energy_kcal_value <={value}'
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            for a in result:
+                dispatcher.utter_message(text= "Nome prodotto "+result[a][0]+"\n"+"Ingredienti: "+"\n"+result[1]+"\n"+"kcal "+result[2]+"\n"+"allergeni: "+"\n"+result[3]+"\n")
+            return [{"name":"allergene_slot","event":"slot","value":None},{"name":"ingrediente_slot","event":"slot","value":None},{"name":"calorie_slot","event":"slot","value":None}]
+
+        value = tracker.get_slot('calorie_slot')
+        query = "select name, ingredients, energy_kcal_value, allergens from mulino_bianco where allergeni not like "+"'%"+tracker.get_slot('allergeni_slot')+" and ingredients like "+"'%"+tracker.get_slot('allergeni_slot')+"%'"+f' and energy_kcal_value <={value}'+" and name like "+tracker.get_slot('prodotto_slot')+"%'"
+        
+        for a in result:
+            dispatcher.utter_message(text= "Nome prodotto "+result[a][0]+"\n"+"Ingredienti: "+"\n"+result[1]+"\n"+"kcal "+result[2]+"\n"+"allergeni: "+"\n"+result[3]+"\n")
+        return [{"name":"allergene_slot","event":"slot","value":None},{"name":"ingrediente_slot","event":"slot","value":None},{"name":"calorie_slot","event":"slot","value":None},{"name":"prodotto_slot","event":"slot","value":None}]

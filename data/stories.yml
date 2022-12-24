@@ -102,3 +102,22 @@ stories:
   steps:
   - intent: snack_meno_calorie
   - action: get_snack_meno_cal
+
+- story: percorso allergeni
+  steps:
+  - intent: info_problem
+  - action: utter_allergia
+  - action: allergeni_form
+  - active_loop: allergeni_form
+  - slot_was_set:
+    - requested_slot: allergene_slot
+  - slot_was_set:
+    - requested_slot: ingrediente_slot
+  - slot_was_set:
+    - requested_slot: calorie_slot
+  - slot_was_set:
+    - requested_slot: prodotto_slot
+  - active_loop: null
+  - action: submit_allergeni
+  - action: utter_goodbye
+  

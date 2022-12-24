@@ -19,6 +19,11 @@ intents:
   - brand
   - viewBrandProduct
   - snack_meno_calorie
+  - allergia
+  - ingrediente
+  - prodotto
+  - info_problem
+  - calorie
 
 entities:
   - dimensione_prodotto
@@ -26,6 +31,8 @@ entities:
   - prodotto
   - brand
   - calorie
+  - allergeni
+  - ingrediente
 
 slots:
   dimensione_prodotto:
@@ -45,6 +52,45 @@ slots:
         conditions:
           - active_loop: prodotto_form
             requested_slot: tipo_prodotto
+
+  allergeni_slot:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: allergeni_form
+            requested_slot: allergeni_slot
+
+  prodotto_slot:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: allergeni_form
+            requested_slot: prodotto_slot
+        
+
+  ingrediente_slot:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: allergeni_form
+            requested_slot: ingrediente_slot
+        
+
+  calorie_slot:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: allergeni_form
+            requested_slot: calorie_slot
+        
   
   brand:
     type: text
@@ -78,6 +124,13 @@ forms:
       - dimensione_prodotto
       - tipo_prodotto
 
+  allergeni_form:
+    required_slots:
+      - allergeni_slot
+      - ingrediente_slot
+      - calorie_slot
+      - prodotto_slot
+
   image_form:
     required_slots:
       - prodotto
@@ -93,6 +146,18 @@ forms:
 responses:
   utter_greet:
   - text: "Ciao! Come stai"
+
+  utter_allergia:
+  - text: "Sei allergico a qualcosa ?"
+
+  utter_ingrediente:
+  - text: "Dimmi quale ingrediente ti interessa. "
+
+  utter_calorie:
+  - text: "Dimmi il numero massimo di calorie che devono essere presenti nei prodotti."
+
+  utter_prodotto:
+  - text: "Dimmi il nome di un prodotto che ti interessa. "
 
   utter_cheer_up:
   - text: "Ecco qualcosa per tirarti su di morale:"
@@ -159,6 +224,12 @@ actions:
 - get_prodotti_brand
 - action_packaging
 - get_snack_meno_cal
+- validate_allergeni_form
+- submit_allergeni
+- utter_allergia
+- utter_ingrediente
+- utter_calorie
+- utter_prodotto
 
 session_config:
   session_expiration_time: 60

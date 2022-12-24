@@ -162,12 +162,53 @@ nlu:
       - fammi vedere gli snack con meno di [155](calorie) kcal
       - mostrami le merendine con meno di [450](calorie) kcal
       - mostrami gli snack con meno di [267](calorie) kcal
-#- intent: inform
-#  examples: |
-#    - Mi piacerebbe una [grande](dimensione_prodotto) confezione
-#    - Io voglio ordinare una [piccolo](dimensione_prodotto) pacco di [biscotti](tipo_prodotto)
-#    - Io vorrei una confezione [media](dimensione_prodotto) di [merendine](tipo_prodotto)
-#    - voglio acquistare una [grande](dimensione_prodotto) confezione di [taralli](tipo_prodotto)
-#    - sono interessato all'acquisto di una confezione [grande](dimensione_prodotto) di [biscotti](tipo_prodotto)
-#    - sono interessata all'acquisto di una confezione [piccolo](dimensione_prodotto) [taralli](tipo_prodotto)
+- intent: allergia
+  examples: |
+    - Sono allergico al [glutine](allergeni)
+    - allergico alla [soia](allergeni)
+    - Soffro di un'allergia, non posso mangiare la (frutta a guscio)[allergeni]
+    - Sono intollerante a certi alimenti
+    - Sono intollerante al [latte](allergeni)
+    - intollerante alle [uova](allergeni)
+    - Non posso magiare tutto
+    - Ho delle allergie
+    - allergie
+    - allergia
+    - intollerante
+
+- intent: ingrediente
+  examples: |
+    - Il prodotto deve contenere lo [zucchero](ingrediente)
+    - Gradirei che fossero [cereali croccanti](ingrediente)
+    - voglio [farina di riso](ingrediente)
+    - Mangio sempre [cacao](ingrediente)
+    - Il [latte](ingrediente)
+
+- intent: prodotto
+  examples: |
+    - Voglio i [canestrini](prodotto)
+    - voglio i [cereali pan di stelle](prodotto)
+    - I [cioccoavena](prodotto)
+    - Mangio sempre [cono pan di stelle](prodotto)
+    - Compro i [cornetti al cioccolato](prodotto)
+    - vorrei i [cioccograno](prodotto)
+
+- intent: info_problem
+  examples: |
+    - Ho dei problemi e mi servono informazioni
+    - Ho dei problemi di saluti
+    - Voglio comprare un prodotto, ma mi servono informazioni per la mia salute
+    - Non posso mangiare per ho dei problemi
+    - Voglio un prodotto particolare
+    - Ho delle richieste da fare
+
+- intent: calorie
+  examples: |
+      - massimo [100](calorie)
+      - al massimo [254](calorie) kcal
+      - [310](calorie) kcal
+      - Sono a dieta, al massimo [155](calorie) kcal
+      - Non oltre le [450](calorie) kcal
+      - [267](calorie) kcal vanno bene
+
 

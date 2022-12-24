@@ -269,7 +269,7 @@ class GetSnackCalLessFromDB(Action):
         if len(result) == 0:
             dispatcher.utter_message("Non ci sono prodotti che rispettano questa condizione!")
         else:
-            pl=f"I prodotti con medo di {cal_serSize} a porzione sono: \n"
+            pl=f"I prodotti con meno di {cal_serSize} a porzione sono: \n"
             for elem in result:
                 if not elem[0] in pl:
                     pl=pl+f' - {elem[0]}, porzione: {elem[1]}, kcal per porzione: {(elem[1]*elem[2])/100}\n'

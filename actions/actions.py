@@ -423,9 +423,6 @@ class ValidateProdottoInfoForm(FormValidationAction):
 class ValidateAllergeniForm(FormValidationAction):
 
 # Prendo tutti i prodotti presenti nel db e proseguo eliminando i risultati non essenziali
-    cursor.execute('select name, ingredients, energy_kcal_value, allergens from mulino_bianco')
-    Allproduct = cursor.fetchall()
-    Filter_result = []
 
     def name(self) -> Text:
         return "validate_allergeni_form"
@@ -438,19 +435,21 @@ class ValidateAllergeniForm(FormValidationAction):
         domain:DomainDict
     ) -> Dict[Text, Any]:
 
-        nome_allergene=tracker.get_slot('allergeni_slot').lower()
-        allergeni_result = list(filter(lambda x: True if nome_allergene in x[3] else False, self.Allproduct)) 
+        print("validate allergene")
+        print(slot_value)
+        if(slot_value == 'no' or slot_value == 'skip'):
+            print('skip slot')
+            return {"allergeni_slot": 'no'}
+        
+        query = f'SELECT name,allergens FROM mulino_bianco WHERE allergens LIKE \'%{slot_value}%\''
 
-        # Se l'allergene non è presente, allora tutti i prodotti sono buoni
-        print(tracker.get_slot('allergeni_slot'))
-        print(self.Filter_result)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("L'allergene non è presente nei nostri prodotti")
+            return {'allergeni_slot': 'no'}
 
-        if len(allergeni_result) == len(self.Allproduct):
-            dispatcher.utter_message(text="Tutti i nostri prodotti sono privi del tuo allergene")
-            return {"allergeni_slot": None}
-        dispatcher.utter_message(text=f"Ok, ho selezionato tutti i prodotti senza {slot_value}")
-        self.Filter_result = allergeni_result # Aggiorno il valore 
-        return {"allergeni_slot": slot_value}
+        return {'allergeni_slot': slot_value}
 
     def validate_ingrediente_slot(
         self,
@@ -460,19 +459,15 @@ class ValidateAllergeniForm(FormValidationAction):
         domain:DomainDict
     ) -> Dict[Text, Any]:
 
-        nome_ingrediente=tracker.get_slot('ingrediente_slot').lower()
-        ingrediente_result = list(filter(lambda x: True if nome_ingrediente in x[1] else False, self.Filter_result))
-
-        # Se l'ingrediente richiesto non è presente, allora viene allertato l'utente
-        print(tracker.get_slot('ingrediente_slot'))
-        print(self.Filter_result)
-
-        if len(ingrediente_result) == 0:
-            dispatcher.utter_message(text="Non abbiamo prodotti privi del tuo allergene con l'ingrediente richiesto")
-            return {"ingrediente_slot": None}
-        dispatcher.utter_message(text=f"Ok, ho selezionato tutti i prodotti che contengono {slot_value}")
-        self.Filter_result = ingrediente_result # Aggiorno il valore 
-        return {"ingrediente_slot": slot_value}
+        print("validate info ingredienti")
+        if(slot_value[0] == 'no' or slot_value[0] == 'skip'):
+            print('skip slot')
+            return {"ingrediente_slot": ['no']}
+        
+        arrayfied = slot_value[0].replace(' ',',')
+        arrayfied = arrayfied.split(',')
+        arrayfied = list(filter(lambda x: len(x)>0,arrayfied))
+        return {"ingrediente_slot": arrayfied}
 
     def validate_calorie_slot(
         self,
@@ -482,19 +477,17 @@ class ValidateAllergeniForm(FormValidationAction):
         domain:DomainDict
     ) -> Dict[Text, Any]:
 
-        calorie=float(tracker.get_slot('calorie_slot').lower())
-        calorie_result = list(filter(lambda x: True if x[2] <= calorie else False, self.Filter_result))
-
-        # Se il numero di calorie non genera risultati, allora viene allertato l'utente
-        print(tracker.get_slot('calorie_slot'))
-        print(self.Filter_result)
-
-        if len(calorie_result) == 0:
-            dispatcher.utter_message(text="Le scelte precedenti non sono compatibili con questo numero di kcal, ci dispiace")
-            return {"calorie_slot": None}
-        dispatcher.utter_message(text=f"Ok, ho selezionato tutti i prodotti che contengono al massimo {slot_value}")
-        self.Filter_result = calorie_result # Aggiorno il valore 
-        return {"calorie_slot": slot_value}
+        print("validate calorie")
+        print(slot_value)
+        if(slot_value == 'no' or slot_value == 'skip'):
+            print('skip slot')
+            return {"calorie_slot": 'no'}
+        
+        if (slot_value.isdigit()):
+            return {'calorie_slot': slot_value}
+        else:
+            dispatcher.utter_message("Valore serving size non valido.")
+            return {'calorie_slot': None}
 
     def validate_prodotto_slot(
         self,
@@ -504,21 +497,21 @@ class ValidateAllergeniForm(FormValidationAction):
         domain:DomainDict
     ) -> Dict[Text, Any]:
 
-        prodotto=tracker.get_slot('prodotto_slot').lower()
-        prodotto_result = list(filter(lambda x: True if prodotto in x[0] else False, self.Filter_result))
-
-        # Se la categoria di prodotto specificata non genera risultati, allora viene allertato l'utente
-        print(tracker.get_slot('prodotto_slot'))
-        for a in self.Filter_result:
-            print('\n')
-            print(a[0])
+        print("validate prodotto")
+        print(slot_value)
+        if(slot_value == 'no' or slot_value == 'skip'):
+            print('skip slot')
+            return {"prodotto_slot": 'no'}
         
-        if len(prodotto_result) == 0:
-            dispatcher.utter_message(text="Non abbiamo prodotti che soddisfano i tuoi requisiti, ci dispiace")
-            return {"prodotto_slot": None}
-        dispatcher.utter_message(text=f"Ok, abbiamo prodotti per la categoria {slot_value}")
-        self.Filter_result = [] # Aggiorno il valore 
-        return {"prodotto_slot": slot_value}
+        query = f'SELECT name FROM mulino_bianco WHERE name LIKE \'%{slot_value}%\''
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if len(result) == 0:
+            dispatcher.utter_message("Il nome del prodotto richiesto non è presente")
+            return {'prodotto_slot': None}
+
+        return {'prodotto_slot': slot_value}
 
 
 
@@ -533,42 +526,46 @@ class SubmitAllergeni(FormValidationAction):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(text="Adesso riproduciamo i risultati ottenuti: \n")
-        print('Sono dentro')
-        if(tracker.get_slot('ingrediente_slot') is None ):
-            print('Sono dentro 1')
-            query = "select name, ingredients, energy_kcal_value, allergens from mulino_bianco where allergeni not like "+"'%"+tracker.get_slot('allergeni_slot')+"%'"
-            cursor.execute(query)
-            result = cursor.fetchall()
-
-            for a in result:
-                dispatcher.utter_message(text= "Nome prodotto "+result[a][0]+"\n"+"Ingredienti: "+"\n"+result[1]+"\n"+"kcal "+result[2]+"\n"+"allergeni: "+"\n"+result[3]+"\n")
-            return [{"name":"allergene_slot","event":"slot","value":None}]
-
-        if(tracker.get_slot('calorie_slot') is None ):
-            print('Sono dentro 2')
-            query = "select name, ingredients, energy_kcal_value, allergens from mulino_bianco where allergeni not like "+"'%"+tracker.get_slot('allergeni_slot')+" and ingredients like "+"'%"+tracker.get_slot('ingrediente_slot')+"%'"
-            cursor.execute(query)
-            result = cursor.fetchall()
-
-            for a in result:
-                dispatcher.utter_message(text= "Nome prodotto "+result[a][0]+"\n"+"Ingredienti: "+"\n"+result[1]+"\n"+"kcal "+result[2]+"\n"+"allergeni: "+"\n"+result[3]+"\n")
-            return [{"name":"allergene_slot","event":"slot","value":None},{"name":"ingrediente_slot","event":"slot","value":None}]
-
-        if(tracker.get_slot('prodotto_slot') is None ):
-            print('Sono dentro 3')
-            value = tracker.get_slot('calorie_slot')
-            query = "select name, ingredients, energy_kcal_value, allergens from mulino_bianco where allergeni not like "+"'%"+tracker.get_slot('allergeni_slot')+" and ingredients like "+"'%"+tracker.get_slot('allergeni_slot')+"%'"+f' and energy_kcal_value <={value}'
-            cursor.execute(query)
-            result = cursor.fetchall()
-
-            for a in result:
-                dispatcher.utter_message(text= "Nome prodotto "+result[a][0]+"\n"+"Ingredienti: "+"\n"+result[1]+"\n"+"kcal "+result[2]+"\n"+"allergeni: "+"\n"+result[3]+"\n")
-            return [{"name":"allergene_slot","event":"slot","value":None},{"name":"ingrediente_slot","event":"slot","value":None},{"name":"calorie_slot","event":"slot","value":None}]
-
-        value = tracker.get_slot('calorie_slot')
-        query = "select name, ingredients, energy_kcal_value, allergens from mulino_bianco where allergeni not like "+"'%"+tracker.get_slot('allergeni_slot')+" and ingredients like "+"'%"+tracker.get_slot('allergeni_slot')+"%'"+f' and energy_kcal_value <={value}'+" and name like "+tracker.get_slot('prodotto_slot')+"%'"
         
-        for a in result:
-            dispatcher.utter_message(text= "Nome prodotto "+result[a][0]+"\n"+"Ingredienti: "+"\n"+result[1]+"\n"+"kcal "+result[2]+"\n"+"allergeni: "+"\n"+result[3]+"\n")
-        return [{"name":"allergene_slot","event":"slot","value":None},{"name":"ingrediente_slot","event":"slot","value":None},{"name":"calorie_slot","event":"slot","value":None},{"name":"prodotto_slot","event":"slot","value":None}]
+        emptyQuery = True
+
+        BasicQueryString = 'SELECT name,ingredients,energy_kcal_value,allergens FROM mulino_bianco WHERE '
+        info_ingredienti=tracker.get_slot('ingrediente_slot')
+        if(len(info_ingredienti)>0 and info_ingredienti[0] != 'no'):
+            emptyQuery = False
+            regexStr = '\''
+            for ingredienti in info_ingredienti:
+                regexStr += ingredienti.lower()+'|'
+        BasicQueryString += 'ingredients REGEXP ' + regexStr[:-1]+'\''
+
+        info_calorie=tracker.get_slot('calorie_slot')
+        if(info_calorie.lower() != 'no'):
+            emptyQuery = False
+            BasicQueryString += ' AND energy_kcal_value <=' + info_calorie
+        
+        info_allergeni=tracker.get_slot('allergeni_slot').lower()
+        if(info_allergeni != 'no'):
+            emptyQuery = False
+            BasicQueryString += ' AND allergens REGEXP \''+info_allergeni+'\''
+        
+        info_prodotto=tracker.get_slot('prodotto_slot')
+        if(info_prodotto.lower() != 'no'):
+            emptyQuery = False
+            BasicQueryString += ' AND name REGEXP \''+info_prodotto+"'"
+
+        if(not emptyQuery):
+            print(BasicQueryString)
+            cursor.execute(BasicQueryString)
+            result = cursor.fetchall()
+            if len(result) == 0:
+                dispatcher.utter_message("Non ci sono prodotti che rispettano questa condizione!")
+            else:
+                pl=f"I prodotti con la condizione proposta sono: \n"
+                dispatcher.utter_message(text=pl)
+                for elem in result:
+                    pout=f' - {elem[0]}, ingredienti:{elem[1]} kcal: {elem[2]}, allergeni: {elem[3]}, \n'
+                    dispatcher.utter_message(text=pout)
+
+
+        print("risultato query")
+        return [{"name":"ingrediente_slot","event":"slot","value":None},{"name":"calorie_slot","event":"slot","value":None},{"name":"allergeni_slot","event":"slot","value":None},{"name":"prodotto_slot","event":"slot","value":None}]

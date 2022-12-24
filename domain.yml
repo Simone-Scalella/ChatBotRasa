@@ -74,7 +74,7 @@ slots:
         
 
   ingrediente_slot:
-    type: text
+    type: list
     influence_conversation: true
     mappings:
       - type: from_text

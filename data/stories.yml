@@ -128,10 +128,13 @@ stories:
   - active_loop: prodotto_info_form
   - slot_was_set:
     - requested_slot: info_ingredienti
+  - action: utter_ingrediente
   - slot_was_set:
     - requested_slot: info_serving
+  - action: utter_calorie
   - slot_was_set:
     - requested_slot: info_categoria
+  - action: utter_prodotto
   - slot_was_set:
     - requested_slot: info_quantity
   - active_loop: null

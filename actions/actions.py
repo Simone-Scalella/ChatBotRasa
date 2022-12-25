@@ -570,7 +570,7 @@ class SubmitAllergeni(FormValidationAction):
                 pl=f"I prodotti con la condizione proposta sono: \n"
                 dispatcher.utter_message(text=pl)
                 for elem in result:
-                    pout=f' - {elem[0]}, ingredienti:{elem[1]} kcal: {elem[2]}, allergeni: {elem[3]}, \n'
+                    pout=f' - {elem[0]}, ingredienti: {elem[1]}. Kcal: {elem[2]}, allergeni: {elem[3]}, \n'
                     dispatcher.utter_message(text=pout)
 
 

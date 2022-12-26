@@ -529,7 +529,6 @@ class SubmitAllergeni(FormValidationAction):
         return "submit_allergeni"
 
     def run(self,
-            #slot_value: Any,
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:

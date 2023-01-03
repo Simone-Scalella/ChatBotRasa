@@ -17,13 +17,26 @@ nlu:
     - buonasera
     - buon proseguimento
 
+- intent: start
+  examples: |
+    - start
+    - open
+    - begin
+    - init
+
+- intent: stop
+  examples: |
+    - quit
+    - close
+    - stop
+
 - intent: arrivederci
   examples: |
     - cu
     - arrivedercii
     - ci vediamo più tardi
     - buona notte
-    - aarrivederci
+    - arrivederci
     - le auguro una buona giornata
     - ci vediamo in giro
     - ciao ciao
@@ -196,7 +209,7 @@ nlu:
 - intent: info_problem
   examples: |
     - Ho dei problemi e mi servono informazioni
-    - Ho dei problemi di saluti
+    - Ho dei problemi di salute
     - Voglio comprare un prodotto, ma mi servono informazioni per la mia salute
     - Non posso mangiare per ho dei problemi
     - Voglio un prodotto particolare

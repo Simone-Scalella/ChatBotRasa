@@ -542,12 +542,12 @@ class SubmitAllergeni(FormValidationAction):
             regexStr = '\''
             for ingredienti in info_ingredienti:
                 regexStr += ingredienti.lower()+'|'
-        BasicQueryString += 'ingredients REGEXP ' + regexStr[:-1]+'\''
+            BasicQueryString += 'ingredients REGEXP ' + regexStr[:-1]+'\'' +' AND '
 
         info_calorie=tracker.get_slot('calorie_slot')
         if(info_calorie.lower() != 'no'):
             emptyQuery = False
-            BasicQueryString += ' AND energy_kcal_value <=' + info_calorie
+            BasicQueryString += 'energy_kcal_value <=' + info_calorie
         
         info_allergeni=tracker.get_slot('allergeni_slot').lower()
         if(info_allergeni != 'no'):

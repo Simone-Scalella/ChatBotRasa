@@ -1,6 +1,7 @@
 version: "3.1"
 
 intents:
+  - start
   - salutare
   - arrivederci
   - affermativo
@@ -184,6 +185,9 @@ forms:
 
 
 responses:
+  utter_start:
+  - text: "Ciao! Sono il bot della mulino bianco, chiedimi qualiasi cosa riguardo i nostri prodotti!"
+
   utter_greet:
   - text: "Ciao! Come stai"
 
@@ -254,6 +258,7 @@ responses:
 actions:
 - action_hello_world
 - action_categoria
+- utter_start
 - utter_greet
 - utter_cheer_up
 - utter_did_that_help

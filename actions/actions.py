@@ -439,7 +439,7 @@ class ValidateAllergeniForm(FormValidationAction):
         print(slot_value)
         if(slot_value == 'no' or slot_value == 'skip'):
             print('skip slot')
-            dispatcher.utter_message("A che tipo di ingrenti sei interessato? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
+            dispatcher.utter_message("A che tipo di ingredienti sei interessato? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
             return {"allergeni_slot": 'no'}
         
         query = f'SELECT name,allergens FROM mulino_bianco WHERE allergens LIKE \'%{slot_value}%\''
@@ -448,10 +448,10 @@ class ValidateAllergeniForm(FormValidationAction):
         result = cursor.fetchall()
         if len(result) == 0:
             dispatcher.utter_message("L'allergene non è presente nei nostri prodotti"+"\n")
-            dispatcher.utter_message("A che tipo di ingrenti sei interessato ? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
+            dispatcher.utter_message("A che tipo di ingredienti sei interessato ? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
             return {'allergeni_slot': 'no'}
             
-        dispatcher.utter_message("A che tipo di ingrenti sei interessato ? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
+        dispatcher.utter_message("A che tipo di ingredienti sei interessato ? Puoi rispondere skip, o no, se non ti interessa il filtro su questo campo")
         return {'allergeni_slot': slot_value}
 
     def validate_ingrediente_slot(
@@ -465,13 +465,13 @@ class ValidateAllergeniForm(FormValidationAction):
         print("validate info ingredienti")
         if(slot_value[0] == 'no' or slot_value[0] == 'skip'):
             print('skip slot')
-            dispatcher.utter_message("Quante calorie deve contenere al masimo ? Puoi rispondere skip o no se non interessa il filtro su questo campo")
+            dispatcher.utter_message("Quante calorie deve contenere al massimo ? Puoi rispondere skip, o no, se non interessa il filtro su questo campo")
             return {"ingrediente_slot": ['no']}
         
         arrayfied = slot_value[0].replace(' ',',')
         arrayfied = arrayfied.split(',')
         arrayfied = list(filter(lambda x: len(x)>0,arrayfied))
-        dispatcher.utter_message("Quante calorie deve contenere al masimo ? Puoi rispondere skip o no se non interessa il filtro su questo campo")
+        dispatcher.utter_message("Quante calorie deve contenere al massimo ? Puoi rispondere skip o no se non interessa il filtro su questo campo")
         return {"ingrediente_slot": arrayfied}
 
     def validate_calorie_slot(

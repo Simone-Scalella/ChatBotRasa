@@ -432,10 +432,10 @@ class ValidateProdottoInfoForm(FormValidationAction):
             return {"info_quantity": 'no'}
         
         if (slot_value.isdigit()):
-            return {'info_serving': slot_value}
+            return {'info_quantity': slot_value}
         else:
             dispatcher.utter_message("Valore quantity non e' valido.")
-            return {'info_serving': None}
+            return {'info_quantity': None}
 
 # Azione di validazione della form per l'acquisizione degli allergeni dell'utente
 class ValidateAllergeniForm(FormValidationAction):
@@ -560,12 +560,12 @@ class SubmitAllergeni(FormValidationAction):
             regexStr = '\''
             for ingredienti in info_ingredienti:
                 regexStr += ingredienti.lower()+'|'
-            BasicQueryString += 'ingredients REGEXP ' + regexStr[:-1]+'\'' +' AND '
+            BasicQueryString += 'ingredients REGEXP ' + regexStr[:-1]+'\''
 
         info_calorie=tracker.get_slot('calorie_slot')
         if(info_calorie.lower() != 'no'):
             emptyQuery = False
-            BasicQueryString += 'energy_kcal_value <=' + info_calorie
+            BasicQueryString += ' AND energy_kcal_value <=' + info_calorie
         
         info_allergeni=tracker.get_slot('allergeni_slot').lower()
         if(info_allergeni != 'no'):

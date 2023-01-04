@@ -290,30 +290,48 @@ class RisultatoDellaRicerca(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
         emptyQuery = True
-
+        beofore = False
         BasicQueryString = 'SELECT name,quantity,servin_size,category,ingredients FROM mulino_bianco WHERE '
         info_ingredienti=tracker.get_slot('info_ingredienti')
         if(len(info_ingredienti)>0 and info_ingredienti[0] != 'no'):
             emptyQuery = False
+            beofore = True
             regexStr = '\''
             for ingredienti in info_ingredienti:
                 regexStr += ingredienti.lower()+'|'
-        BasicQueryString += 'ingredients REGEXP ' + regexStr[:-1]+'\''
+            BasicQueryString += 'ingredients REGEXP ' + regexStr[:-1]+'\''
 
         info_serving=tracker.get_slot('info_serving')
         if(info_serving.lower() != 'no'):
             emptyQuery = False
-            BasicQueryString += ' AND servin_size >=' + info_serving
+            if(beofore):
+                BasicQueryString += ' AND servin_size >=' + info_serving
+            else:
+                BasicQueryString += 'servin_size >=' + info_serving
+            beofore = True
+
         
         info_categoria=tracker.get_slot('info_categoria').lower()
         if(info_categoria != 'no'):
             emptyQuery = False
-            BasicQueryString += ' AND category REGEXP \''+info_categoria+'\''
+            if(beofore):
+                BasicQueryString += ' AND category REGEXP \''+info_categoria+'\''
+            else:
+                BasicQueryString += ' category REGEXP \''+info_categoria+'\''
+            beofore = True
+
+            
         
         info_quantity=tracker.get_slot('info_quantity')
         if(info_quantity.lower() != 'no'):
             emptyQuery = False
-            BasicQueryString += ' AND quantity >= '+ info_quantity
+            if(beofore):
+                BasicQueryString += ' AND quantity >= '+ info_quantity
+            else:
+                BasicQueryString += ' quantity >= '+ info_quantity
+            beofore = True
+
+            
 
         if(not emptyQuery):
             print(BasicQueryString)

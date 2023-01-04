@@ -195,7 +195,7 @@ responses:
   - text: "Sei allergico a qualcosa ?"
 
   utter_ingrediente:
-  - text: "Dimmi quale ingrediente ti interessa. "
+  - text: "Dimmi a quale ingrediente sei interessato. "
 
   utter_calorie:
   - text: "Dimmi il numero massimo di calorie che devono essere presenti nei prodotti."
@@ -244,16 +244,16 @@ responses:
   - text: "Perfetto, procediamo con l'acquisto"
 
   utter_ask_info_ingredienti:
-  - text: "Che tipo di ingrenti sei interessato? puo' rispondere skip o no se non interessa il filtro su questo campo"
+  - text: "A che tipo di ingredienti sei interessato? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
 
   utter_ask_info_serving:
-  - text: "Ha un preferenza di serving size minimo? puo' rispondere skip o no se non interessa il filtro su questo campo"
+  - text: "Hai un preferenza di serving size minimo? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
 
   utter_ask_info_categoria:
-  - text: "Che tipo di categoria sei interessato? puo' rispondere skip o no se non interessa il filtro su questo campo"
+  - text: "Che tipo di categoria sei interessato? puo' rispondere skip o no se non ti interessa il filtro su questo campo"
 
   utter_ask_info_quantity:
-  - text: "Ha preferenza della quantita minima richiesta? puo' rispondere skip o no se non interessa il filtro su questo campo"
+  - text: "Ha preferenza della quantita minima richiesta? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
 
 actions:
 - action_hello_world

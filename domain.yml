@@ -186,10 +186,10 @@ forms:
 
 responses:
   utter_start:
-  - text: "Ciao! Sono il bot della mulino bianco, chiedimi qualiasi cosa riguardo i nostri prodotti!"
+  - text: "Ciao! Sono il bot della mulino bianco, chiedimi qualsiasi cosa riguardo: tutte le categorie presenti, packaging del prodotto, informazioni relative al prodotto, informazioni relative agli allergeni, tutti i brand presenti, immagine associata al prodotto, filtri sulle calorie e acquisto di un prodotto."
 
   utter_greet:
-  - text: "Ciao! Come stai"
+  - text: "Ciao! Come stai?"
 
   utter_allergia:
   - text: "Sei allergico a qualcosa ?"
@@ -220,7 +220,7 @@ responses:
   - text: "Sono un bot, che conosce i prodotti della Mulino Bianco. Realizzato da KaffeeHause"
 
   utter_prodotto_slots:
-  - text: "Io adesso ordinerò un {tipo_prodotto} da {dimensione_prodotto}"
+  - text: "Adesso ordinerò un {tipo_prodotto} da {dimensione_prodotto}"
 
   utter_ask_continue:
   - text: "Sei sicuro di voler uscire dalla form ?"
@@ -247,13 +247,13 @@ responses:
   - text: "A che tipo di ingredienti sei interessato? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
 
   utter_ask_info_serving:
-  - text: "Hai un preferenza di serving size minimo? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
+  - text: "Hai una preferenza di serving size minimo? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
 
   utter_ask_info_categoria:
-  - text: "Che tipo di categoria sei interessato? puo' rispondere skip o no se non ti interessa il filtro su questo campo"
+  - text: "A che tipo di categoria sei interessato? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
 
   utter_ask_info_quantity:
-  - text: "Ha preferenza della quantita minima richiesta? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
+  - text: "Hai una preferenza relativamente alla quantita minima richiesta? puoi rispondere skip o no se non ti interessa il filtro su questo campo"
 
 actions:
 - action_hello_world

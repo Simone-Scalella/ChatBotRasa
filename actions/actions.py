@@ -552,11 +552,12 @@ class SubmitAllergeni(FormValidationAction):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
         emptyQuery = True
-
+        beofore = False
         BasicQueryString = 'SELECT name,ingredients,energy_kcal_value,allergens FROM mulino_bianco WHERE '
         info_ingredienti=tracker.get_slot('ingrediente_slot')
         if(len(info_ingredienti)>0 and info_ingredienti[0] != 'no'):
             emptyQuery = False
+            beofore = True
             regexStr = '\''
             for ingredienti in info_ingredienti:
                 regexStr += ingredienti.lower()+'|'
@@ -565,26 +566,38 @@ class SubmitAllergeni(FormValidationAction):
         info_calorie=tracker.get_slot('calorie_slot')
         if(info_calorie.lower() != 'no'):
             emptyQuery = False
-            BasicQueryString += ' AND energy_kcal_value <=' + info_calorie
+            if(beofore):
+                BasicQueryString += ' AND energy_kcal_value <=' + info_calorie
+            else:
+                beofore = True
+                BasicQueryString += 'energy_kcal_value <=' + info_calorie
         
         info_allergeni=tracker.get_slot('allergeni_slot').lower()
         if(info_allergeni != 'no'):
             emptyQuery = False
-            BasicQueryString += ' AND allergens NOT REGEXP \''+info_allergeni+'\''
-        
+            if(beofore):
+                BasicQueryString += ' AND allergens NOT REGEXP \''+info_allergeni+'\''
+            else:
+                beofore = True
+                BasicQueryString += 'allergens NOT REGEXP \''+info_allergeni+'\''
+                
         info_prodotto=tracker.get_slot('prodotto_slot')
         if(info_prodotto.lower() != 'no'):
             emptyQuery = False
-            BasicQueryString += ' AND name REGEXP \''+info_prodotto+"'"
+            if(beofore):
+                BasicQueryString += ' AND name REGEXP \''+info_prodotto+"'"
+            else:
+                beofore = True
+                BasicQueryString += ' name REGEXP \''+info_prodotto+"'"
 
         if(not emptyQuery):
             print(BasicQueryString)
             cursor.execute(BasicQueryString)
             result = cursor.fetchall()
             if len(result) == 0:
-                dispatcher.utter_message("Non ci sono prodotti che rispettano questa condizione!")
+                dispatcher.utter_message("Non ci sono prodotti che soddisfano le tue richieste !")
             else:
-                pl=f"I prodotti con la condizione proposta sono: \n"
+                pl=f"I prodotti con le condizioni proposte sono: \n"
                 dispatcher.utter_message(text=pl)
                 for elem in result:
                     pout=f' - {elem[0]}, ingredienti: {elem[1]}. Kcal: {elem[2]}, allergeni: {elem[3]}, \n'

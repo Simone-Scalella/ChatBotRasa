@@ -541,7 +541,7 @@ class ValidateAllergeniForm(FormValidationAction):
 
 
     
-# Azione che effettua la submit di un acquisto
+# Azione che effettua la submit degli allergeni
 class SubmitAllergeni(FormValidationAction):
     def name(self) -> Text:
         return "submit_allergeni"

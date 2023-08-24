@@ -60,8 +60,83 @@ sia per gli intent che per le entities;
   - **domain.yml** file che contiene tutte le informazioni che sono necessarie al chatbot per poter operare, nello specifico in questo file è possibile vedere una lista di tutti gli intent che potranno essere espressi durante una conversazione insieme alle entities che saranno valorizzate, gli slot utilizzati per memorizzare i dati necessari per l’elaborazione, le utterences con le risposte predefinite che il chatbot fornirà, la lista contenente tutte le azioni e la lista dove vengono definite le form.
 
 # Funzionalità del chatbot
-Procederemo in questo capitolo illustrando le varie funzionalità del chatbot e per ognuna di esse spiegando le scelte e le strategie applicate per svilupparle.
+Procederemo in questo capitolo illustrando le varie funzionalità del chatbot e per ognuna di esse spiegando le scelte e le strategie applicate per svilupparle. Inoltre, riporteremo le immagini con i risultati ottenuti.
 
 ## Visualizzare tutte le categorie dei prodotti presenti
+Funzione del chatbot che permette di visualizzare tutte le categorie dei prodotti presenti (ad es. torte, biscotti, …). Il primo step per realizzare tale funzionalità è stato fornire al modello di machine learning alcuni esempi di frasi che l’utente potrebbe scrivere al chatbot con l’intento di vedere le categorie dei vari prodotti e su questi il modello è stato poi allenato.
+Per realizzare tale funzione è stata definita una classe di azione che, mediante una connessione al database, effettua una query in grado di estrarre distintamente tutte le categorie presenti all’interno del database ed associate a ciascun prodotto. Il risultato che si ottiene è una lista riportante tutte le categorie presenti nel database.
 
-![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/avviobot.png)
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/allcat.png)
+
+## Visualizzare da cosa è composto il packaging del prodotto
+Funzione del chatbot che permette di visualizzare come è composto il packaging del prodotto (ad es. plastica, carta, …). Il primo step per realizzare tale funzionalità è stato fornire al modello di machine learning alcuni esempi di frasi che l’utente potrebbe scrivere al chatbot con l’intento di vedere il packaging (utile ai fini di un corretto riciclo) di un dato prodotto e su questi il modello è stato poi allenato.
+Per realizzare tale funzione è stata definita una classe di azione che, mediante una connessione al database, effettua una query in grado di estrarre il packaging associato ad un dato prodotto, passato in input dall’utente. Viene effettuato un ulteriore controllo sulla presenza del prodotto nel database.
+
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/package.png)
+
+## Visualizzare informazioni sul prodotto
+Funzione del chatbot che permette di visualizzare un prodotto, le diverse dimensioni dei pacchi disponibili, la porzione consigliata, la categoria in cui rientra il prodotto e gli ingredienti.
+Questa funzione è una funzione articolata e richiede diverse informazioni all’utente. In fase di implementazione si è tenuta in considerazione la possibilità che l’utente non volesse specificare tutte le informazioni che sono state considerate, quindi, su quattro all'utente ne interessano due. Di conseguenza si è deciso di realizzare questa funzione rendendo le richieste di informazioni facoltative. Sono state realizzate due classi di azioni, una per l’inserimento di valori da parte dell’utente e una per costruire la query da fare al database. Tutte le azioni sono state riportate nel file domain.
+La prima azione è quella di verifica dell’input inserito dall’utente. All’utente viene comunicata la possibilità di inserire tutte o solo una parte delle informazioni richieste. L’input inserito dall’utente viene controllato, infatti, se inserisce la stringa “no” o “skip” lo slot corrispondente verrà valorizzato con un valore di controllo. Tale valore è la stringa “no” che useremo per fare ulteriori controlli in fase di invio della query. Si offre la possibilità di inserire più ingredienti nella richiesta, infatti, lo slot degli ingredienti è stato definito come una lista. Infine, sono stati realizzati alcuni controlli di sicurezza, ad esempio controlliamo se per le calorie è stato inserito un numero, altrimenti, avvisiamo l’utente, oppure controlliamo se la categoria inserita esiste, tramite una semplice query e poi, successivamente, controllandone il risultato.
+Al termine della storia viene attivata l’action di invio della query.
+In questa azione, in base a ciò che è stato inserito all’utente, viene realizzata la query che verrà inviata al database. La query viene costruita in maniera incrementale, controllando il valore presente nello slot. Se nello slot è presente la stringa “no”, allora, non si aggiunge la condizione nel where relativa a quell’informazione. Invece, se è presente l’input dell’utente si costruisce un pezzo della query, e lo si aggiunge alla where. Per evitare errori nella costruzione della query sono state utilizzate diverse guardie, in quanto l’utente ha il massimo grado di libertà nel rispondere al chatbot. Ad esempio, un caso limite, è quello in cui l’utente inizia la story ma inserisce solo no o skip, quindi, in questo caso il chatbot non deve inviare nessuna query al database.
+
+### Immagini della visualizzazione delle informazioni dei prodotti
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/prodottiok2.png)
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/prodottiOK.png)
+
+### Immagini della visualizzazione delle informazioni dei prodotti con errore d'inserimento
+
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/testprodotti.png)
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/prodottotest2.png)
+
+## Visualizzare un prodotto, i suoi ingredienti, i suoi allergeni e le sue kcal
+Descriviamo la funzione che realizza la visualizzazione dei prodotti, prendendo in considerazione gli allergeni, gli ingredienti, il tipo di prodotto e le sue kcal. Per realizzare questa funzione si è deciso di inserire un nuovo intent, nel quale andiamo a riportare gli esempi di frasi che una persona con allergie o intolleranze alimentari può scrivere al chatbot.
+Successivamente sono state realizzate le due azioni che servono per recuperare l’input inserito dall’utente e per realizzare la query da inviare al database. Durante la realizzazione di questa funzione si è tenuto conto di tutte le considerazioni fatte precedentemente, quindi, l’utente ha la facoltà di inserire tutte o solo alcune delle informazioni richieste. Di seguito riportiamo un’immagine contenente il codice utilizzato per realizzare la funzione.
+Anche in questa funzione sono stati inseriti dei controlli, ad esempio se l’utente inserisce un allergene che non esiste, viene allertato con un messaggio, che gli comunica l’assenza di quell’allergene in tutti i nostri prodotti. Le informazioni richieste all’utente sono l’allergene, gli ingredienti che gli interessano, infatti, l’utente può inserire più ingredienti che vengono inseriti in uno slot di tipo List, il valore massimo di kcal che deve contenere, e infine, il tipo di prodotto che gli interessa. L'azione termina quando l’utente ha inserito tutte le informazioni richieste. Al termine di questa storia viene attivata la funzione di invio della query al database. Di seguito riportiamo un’immagine contente il codice utilizzato per realizzare questa funzione.
+Questa funzione costruisce la query in maniera incrementale, basandosi sulle informazioni inserite dall’utente. Si controllano gli slot valorizzati con gli input dell’utente, se il valore è “no”, perché l’utente ha deciso di non inserire quell’informazione, allora, la funzione non inserirà nella query la condizione corrispondente, altrimenti, se è stato inserito un valore corretto, la funzione aggiunge la condizione corrispondente alla where della query. Una volta terminata la query si mostra il risultato all’utente e a tutti gli slot viene assegnato il valore “None”, altrimenti, continuerebbero a contenere i vecchi valori, e se l’utente riattiva la storia ottiene sempre lo stesso risultato. In questo modo gli slot sono pronti per essere utilizzati nella riattivazione successiva della storia. Di seguito riportiamo un’immagine dell’output ottenuto al termine della storia.
+
+### Immagine della visualizzazione dei prodotti, degli ingredienti, dei suoi allergeni e le sue kcal
+
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/allergeni1.png)
+
+### Immagine della visualizzazione dei prodotti, degli ingredienti, dei suoi allergeni e le sue kcal con errore d'inserimento
+
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/testallergeni.png)
+
+## Visualizzare i vari brand presenti e i relativi prodotti
+Funzione del chatbot che permette di visualizzare i vari brand presenti, e una volta selezionato uno di essi tutti i prodotti di tale brand. Il primo step per realizzare tale funzionalità e stato fornire al modello di machine learning alcuni esempi di frasi che l’utente potrebbe scrivere al chatbot con l’intento di conoscere i brand che sono presenti nel dataset e su questi il modello è stato poi allenato.
+Successivamente si è definita l’azione che connettendosi al database prende tutti i diversi brand (mediante una query SQL) e fa restituire al chatbot tali brand sottoforma di bottone.
+Si è deciso di utilizzare un bottone per rendere più user-friendly lo step successivo ovvero quello di conoscere tutti i prodotti di tale brand, cosicché l’utente non debba digitare nuovamente il brand rischiando di fare un errore.
+
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/brand.png)
+
+## Visualizzare prodotti in relazione alle calorie
+Funzione del chatbot che permette di visualizzare tutti i prodotti che hanno meno calorie di quelle inserite dall’utente, per porzione. Il primo step per realizzare tale funzionalità e stato fornire al modello di machine learning alcuni esempi di frasi che l’utente potrebbe scrivere al chatbot con l’intento di visualizzare la lista delle merendine che hanno meno calorie di quelle specificate dall’utente per porzione consigliata. Il modello è stato poi allenato con questi esempi. A differenza degli altri intent qua si può notare che vi è un valore tra parentesi quadre, affiancato a uno tra parentesi tonde. Questo è fatto per creare l’entità “calorie”, mediante la quale il chatbot capirà che tale valore riguarda le calorie che saranno poi utilizzate per fare la query.
+Successivamente si è definita l’azione che connettendosi al database prende tutti i prodotti che rispettano la condizione posta (mediante una query SQL) e fa restituire al chatbot la lista di tali prodotti con il nome, la porzione (in grammi) e le kcal per porzione.
+
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/calorie.png)
+
+## Visualizzare l’immagine di un prodotto
+Funzione del chatbot che permette di visualizzare l’immagine di un prodotto. Il primo step per realizzare tale funzionalità e stato fornire al modello di machine learning alcuni esempi di frasi che l’utente potrebbe scrivere al chatbot con l’intento di visualizzare un’immagine di un particolare prodotto, che sarà specificato dall’utente nell’interazione successiva. Il modello è stato poi allenato con questi esempi.
+Successivamente si è definita l’azione che connettendosi al database prende il link del prodotto di interesse (mediante una query SQL) e fa restituire al chatbot un messaggio di testo insieme al link dell’immagine.
+A differenza delle altre risposte qui si ha un attributo image, che serve per consentire la visualizzazione dell’immagine.
+
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/imageprod.png)
+
+## Acquistare un dato prodotto
+Funzione del chatbot che permette di effettuare l’acquisto di un prodotto. Il primo step per realizzare tale funzionalità è stato fornire al modello di machine learning alcuni esempi di frasi che l’utente potrebbe scrivere al chatbot con l’intento di acquistare un prodotto, che sarà specificato dall’utente nell’interazione successiva, insieme alla dimensione della confezione desiderata. Il modello è stato poi allenato con questi esempi.
+Per consentire l’acquisto mediante il chatbot si è dovuto effettuare un primo step nel quale si effettuavano le validazioni degli slot, della form di acquisto riempiti dall’utente; ovvero si andava a vedere se nel database tali prodotti esistevano e se la dimensione del pacco che l’utente richiedeva era effettivamente presente.
+Terminata la prima azione, che controlla l’input inserito dall’utente, la storia attiva la seconda azione realizzata per questa funzione, quella che effettua l’invio della query al database. La query viene costruita inserendo nel campo values i valori definiti dall’utente. La submit della query viene realizzata all’interno di un costrutto try except, il quale serve ad avvisare l’utente qualora si presentino problemi legati al database. Se non si sono verificati problemi, l’utente viene avvisato dell’esito positivo, relativo al termine dell’azione.
+
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/acquistook.png)
+
+# Connessione a Telegram e Test
+## Connessione
+L’ultima fase del progetto consiste nel collegamento del chatbot realizzato ad una piattaforma di messaggistica istantanea, in maniera tale che gli utenti possano interagirci in maniera semplice, da smartphone e soprattutto con un’interfaccia grafica moderna. La piattaforma che si è deciso di utilizzare è Telegram, si è utilizzato il servizio ngrok per finalizzare tale connessione e mandare in esecuzione il chatbot su server locale.
+
+## Testing
+Finita l’implementazione e la connessione alla piattaforma di messaggistica istantanea scelta, si è proceduto a testare il chatbot simulando le possibili interazioni che l’utente potrebbe avere con esso. Si è proceduto a simulare anche il comportamento di utente sbadato, cioè, di utente che inserisce, in modo sbadato, degli input errati. Questo ci è servito per verificare il corretto funzionamento dei controlli implementati. Di seguito riportiamo alcune immagini con i risultati ottenuti.
+
+# Conclusioni e sviluppi futuri
+Si è utilizzato il framework RASA (AI) per la realizzazione di un chatbot come supporto al cliente, nella fattispecie un chatbot che guidi l’utente nella scelta dei prodotti fra quelli venduti dall’azienda Mulino Bianco. Le funzionalità implementate (descritte nel Capitolo 3 di tale relazione) del chatbot sono rivolte principalmente ai prodotti della Mulino Bianco e di alcune delle sue controllate. Si potrebbe pensare come un possibile sviluppo futuro di ampliare il database dei prodotti, per estenderlo pure a quelli di altre aziende oltre che creare altre funzionalità più incentrate sulle informazioni nutrizionali.

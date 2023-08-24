@@ -64,4 +64,4 @@ Procederemo in questo capitolo illustrando le varie funzionalità del chatbot e 
 
 ## Visualizzare tutte le categorie dei prodotti presenti
 
-![test](https://myoctocat.com/assets/images/base-octocat.svg)
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/avviobot.png)

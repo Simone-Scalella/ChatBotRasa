@@ -85,7 +85,7 @@ In questa azione, in base a ciò che è stato inserito all’utente, viene reali
 
 ### Immagini della visualizzazione delle informazioni dei prodotti
 ![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/prodottiok2.png)
-![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/prodottiOk.png)
+![test](https://github.com/Simone-Scalella/ChatBotRasa/blob/main/image/prodottoOk.png)
 
 ### Immagini della visualizzazione delle informazioni dei prodotti con errore d'inserimento
 
